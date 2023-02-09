@@ -38,6 +38,14 @@ class Livro(models.Model):
 
         return reverse('book-detail', args=[str(self.id)])
 
+    def mostra_genero(self):
+
+        return ', '.join([genero.nome for genero in self.genero.all()[:3]])
+        
+
+    mostra_genero.short_description = 'Genero'
+
+
 import uuid    
 
 class InstanciaLivro(models.Model):
