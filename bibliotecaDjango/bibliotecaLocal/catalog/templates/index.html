@@ -1,0 +1,20 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}<title>Biblioteca Local - Página principal</title>{% endblock %}
+
+{% block content %}
+    <h1>Pagina principal - Biblioteca Local</h1>
+    <p>Seja bem-vindo à Biblioteca Local, um site desenvolvido por Leandro Miranda em parceria com <em>Mozilla Developer Network</em></p>
+
+    <h2>Conteudo dinâmico</h2>
+    <p>Contagem dos registros da Biblioteca Local:</p>
+    <ul>
+      <li><strong>Livros:</strong> {{ num_livros }}</li>
+      <li><strong>Cópias:</strong> {{ num_instancias }}</li>
+      <li><strong>Cópias disponíveis:</strong> {{ num_instancias_disponivel }}</li>
+      <li><strong>Autores:</strong> {{ num_autores }}</li>
+      <li><strong>Generos:</strong>{{ num_generos }}</li>
+      <li><strong>Livros com 'Ensaio':</strong> {{ num_ensaio }}</li>
+    </ul>
+
+{% endblock %}
