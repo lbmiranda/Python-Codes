@@ -36,7 +36,7 @@ class Livro(models.Model):
 
     def get_absolute_url(self):
 
-        return reverse('book-detail', args=[str(self.id)])
+        return reverse('livro-detail', args=[str(self.id)])
 
     def mostra_genero(self):
 

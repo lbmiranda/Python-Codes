@@ -24,3 +24,13 @@ def index(request):
     return render(request, 'index.html', context=context)
 
 
+from django.views import generic
+
+class LivroListView(generic.ListView):
+    model = Livro 
+        
+
+class LivroDetalheView(generic.ListView):
+    model = Livro
+     
+
