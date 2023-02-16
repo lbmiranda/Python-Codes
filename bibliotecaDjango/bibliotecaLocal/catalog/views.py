@@ -30,7 +30,13 @@ class LivroListView(generic.ListView):
     model = Livro 
         
 
-class LivroDetalheView(generic.ListView):
+class LivroDetalheView(generic.DetailView):
     model = Livro
      
 
+class AutorListView(generic.ListView):
+    model = Autor
+
+
+class AutorDetalheView(generic.DetailView):
+    model = Autor
