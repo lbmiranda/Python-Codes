@@ -30,14 +30,14 @@ class LivroAdmin(admin.ModelAdmin):
 @admin.register(InstanciaLivro)
 class InstanciaAdmin(admin.ModelAdmin):
     
-    list_display = ('id','livro','data_devolucao','status')
+    list_display = ('id','livro','data_devolucao','status', 'emprestado_para')
     list_filter = ('status','data_devolucao')
     fieldsets = (
         ('Dados gerais', {
             'fields': ('livro','edicao','id')
         }),
         ('Disponibilidade', {
-            'fields': ('status','data_devolucao')
+            'fields': ('status','data_devolucao','emprestado_para')
         }),
     )
 

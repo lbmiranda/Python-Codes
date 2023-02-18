@@ -2,6 +2,8 @@ from enum import unique
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
+from datetime import date
 
 # Create your models here.
 
@@ -53,6 +55,7 @@ class InstanciaLivro(models.Model):
     livro = models.ForeignKey('Livro', on_delete=models.RESTRICT, null = True)
     edicao = models.CharField(max_length=200)
     data_devolucao = models.DateField(null=True, blank=True)
+    emprestado_para = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     STATUS_EMPRESTIMO = (
         ('m', 'Manutenção'),
@@ -71,9 +74,16 @@ class InstanciaLivro(models.Model):
 
     class Meta:
         ordering = ['data_devolucao']
+        permissions = (('pode_registrar_devolucao', 'Devolve livro'),)
+
 
     def __str__(self):
         return f'{self.id}({self.livro.titulo})'
+
+    @property
+    def atrasado(self):
+        """Verifica se um livro está atrasado baseado na data corrente"""
+        return bool(self.data_devolucao and date.today() > self.data_devolucao)
 
 
 class Autor(models.Model):

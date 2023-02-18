@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Livro,Autor,InstanciaLivro,Genero
+from .models import Livro,Autor,InstanciaLivro
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -9,8 +10,7 @@ def index(request):
     num_livros = Livro.objects.all().count()    
     num_instancias = InstanciaLivro.objects.all().count()
     num_instancias_disponivel = InstanciaLivro.objects.filter(status__exact='d').count()
-    num_autores = Autor.objects.count()
-    num_generos = Livro.objects.all().count()
+    num_autores = Autor.objects.count()    
     num_ensaio = Livro.objects.filter(titulo__icontains = 'ensaio').count()
     num_visitas = request.session.get('num_visitas',0)
 
@@ -21,7 +21,6 @@ def index(request):
         'num_instancias': num_instancias,
         'num_instancias_disponivel': num_instancias_disponivel,
         'num_autores': num_autores,
-        'num_generos': num_generos,
         'num_ensaio': num_ensaio,
         'num_visitas': num_visitas,
     }
@@ -41,3 +40,25 @@ class AutorListView(generic.ListView):
 class AutorDetalheView(generic.DetailView):
     model = Autor
 
+class LivroEmprestadoPorUsuarioView(LoginRequiredMixin, generic.ListView):
+    model = InstanciaLivro
+    template_name = 'catalog/instancialivro_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return (
+            InstanciaLivro.objects.filter(emprestado_para=self.request.user)
+            .filter(status__exact='e')
+            .order_by('data_devolucao')
+        )
+
+class LivrosEmprestadosGeralView(LoginRequiredMixin, generic.ListView):
+    model = InstanciaLivro
+    template_name = 'catalog/livrosemprestados_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+       return (
+            InstanciaLivro.objects.filter(status__exact='e')
+            .order_by('emprestado_para')
+        )

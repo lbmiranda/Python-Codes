@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Livros emprestados - Geral</h1>
+    <br>
+
+    {% if instancialivro_list %}
+    
+    <ul>
+
+      {% for instlivro in instancialivro_list %}
+      <li class="{% if instlivro.atrasado %}text-danger{% endif %}">
+        <a href="{% url 'livro-detail' instlivro.livro.pk %}">{{ instlivro.livro.titulo }}</a> ({{ instlivro.data_devolucao |default_if_none:instlivro.status }})
+        <li style="list-style: none;">Emprestado para: {{ instlivro.emprestado_para |default_if_none:"" }} </li>
+        {% if instlivro.atrasado %}
+          <p>Livro atrasado!</p>
+        {% endif %}
+        <br>
+       
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>Não há livros emprestados.</p>
+    {% endif %}
+{% endblock %}
