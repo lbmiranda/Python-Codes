@@ -74,7 +74,7 @@ class InstanciaLivro(models.Model):
 
     class Meta:
         ordering = ['data_devolucao']
-        permissions = (('pode_registrar_devolucao', 'Devolve livro'),)
+        permissions = (('pode_registrar_devolucao', 'Devolve livro'),('pode_renovar_livro','Renova livro'))
 
 
     def __str__(self):

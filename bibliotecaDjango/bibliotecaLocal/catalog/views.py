@@ -1,7 +1,12 @@
-from django.shortcuts import render
+import datetime
+from django.shortcuts import render, get_object_or_404
 from .models import Livro,Autor,InstanciaLivro
+from .forms import FormRenovaLivros
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
 
@@ -62,3 +67,28 @@ class LivrosEmprestadosGeralView(LoginRequiredMixin, generic.ListView):
             InstanciaLivro.objects.filter(status__exact='e')
             .order_by('emprestado_para')
         )
+
+@login_required
+@permission_required('catalog.pode_renovar_livro', raise_exception=True)
+def renova_livro_bibliotecario(request, pk):
+    instancia_livro = get_object_or_404(InstanciaLivro, pk = pk)
+
+    if request.method == 'POST':
+        form = FormRenovaLivros(request.POST)
+
+        if form.is_valid():
+            instancia_livro.data_devolucao = form.cleaned_data['data_renovacao']
+            instancia_livro.save()
+
+            return HttpResponseRedirect(reverse('livros-emprestados'))
+    
+    else:
+        data_renovacao_proposta = datetime.date.today() + datetime.timedelta(weeks=3)
+        form = FormRenovaLivros(initial={'data_renovacao': data_renovacao_proposta})
+
+    context = {
+        'form': form,
+        'instancia_livro': instancia_livro,
+    }
+
+    return render(request, 'catalog/renova_livro_bibliotecario.html', context)

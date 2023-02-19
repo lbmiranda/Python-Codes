@@ -15,8 +15,9 @@
         {% if instlivro.atrasado %}
           <p>Livro atrasado!</p>
         {% endif %}
+        
+        <li style="list-style: none;">{% if perms.catalog.pode_renovar_livro %}- <a href="{% url 'renova-livro-bibliotecario' instlivro.id %}">Renovar</a>  {% endif %}</li>
         <br>
-       
       </li>
       {% endfor %}
     </ul>
