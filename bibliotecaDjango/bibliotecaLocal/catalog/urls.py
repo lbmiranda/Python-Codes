@@ -10,4 +10,7 @@ urlpatterns = [
     path('meuslivros/',views.LivroEmprestadoPorUsuarioView.as_view(), name='meus-emprestados'),
     path('livrosemprestados/', views.LivrosEmprestadosGeralView.as_view(), name='livros-emprestados'),
     path('livro/<uuid:pk>/renova', views.renova_livro_bibliotecario, name = 'renova-livro-bibliotecario'),
+    path('autor/criar/', views.AutorCreate.as_view(), name = 'autor-create'),
+    path('autor/<int:pk>/atualizar/', views.AutorUpdate.as_view(), name = 'autor-update'),
+    path('autor/<int:pk>/deletar/', views.AutorDelete.as_view(), name = 'autor-delete'),
 ]

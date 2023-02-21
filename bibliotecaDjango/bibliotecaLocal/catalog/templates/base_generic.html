@@ -28,6 +28,7 @@
             {% if user.is_staff %}
               <li>Equipe:</li>
               <li><a href="{% url 'livros-emprestados' %}"> Livros emprestados</a></li>
+              <li><a href="{% url 'autor-create' %}"> Criar autor</a></li>           
               <br>
             {% endif %}
             

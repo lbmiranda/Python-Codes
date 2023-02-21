@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from datetime import date
+import uuid   
 
 # Create your models here.
 
@@ -47,8 +48,6 @@ class Livro(models.Model):
 
     mostra_genero.short_description = 'Genero'
 
-
-import uuid    
 
 class InstanciaLivro(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='ID único para este livro em particular')
@@ -94,6 +93,7 @@ class Autor(models.Model):
 
     class Meta:
         ordering = ['nome','sobrenome']
+        permissions = [('pode_criar_atualizar_autor', 'Cria/Atualiza autor'),('pode_deletar_autor','Deleta autor')]
 
     def get_absolute_url(self):
         return reverse('autor-detail', args=[str(self.id)])

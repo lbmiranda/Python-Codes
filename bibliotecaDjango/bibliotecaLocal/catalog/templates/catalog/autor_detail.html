@@ -4,7 +4,17 @@
   
     <h1>Autor: {{ autor }} </h1>
 
-    <p>{{autor.data_nascimento}} - {% if autor.data_morte %}{{autor.data_morte}}{% endif %}</p>
+    <p>{{autor.data_nascimento}} - 
+      {% if autor.data_morte %}
+        {{autor.data_morte}}
+      {% endif %}
+    </p>
+
+    <p>
+      {% if user.is_staff %}
+        <li><a href="{% url 'autor-update' autor.pk %}">Atualizar autor</a></li>}
+      {% endif %}
+    </p>
 
   <div style="margin-left:20px;margin-top:20px">
     <h4>Obras</h4>

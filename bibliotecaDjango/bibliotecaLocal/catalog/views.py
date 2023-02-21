@@ -3,10 +3,12 @@ from django.shortcuts import render, get_object_or_404
 from .models import Livro,Autor,InstanciaLivro
 from .forms import FormRenovaLivros
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 
 # Create your views here.
 
@@ -71,6 +73,7 @@ class LivrosEmprestadosGeralView(LoginRequiredMixin, generic.ListView):
 @login_required
 @permission_required('catalog.pode_renovar_livro', raise_exception=True)
 def renova_livro_bibliotecario(request, pk):
+    
     instancia_livro = get_object_or_404(InstanciaLivro, pk = pk)
 
     if request.method == 'POST':
@@ -92,3 +95,21 @@ def renova_livro_bibliotecario(request, pk):
     }
 
     return render(request, 'catalog/renova_livro_bibliotecario.html', context)
+
+
+class AutorCreate(PermissionRequiredMixin,CreateView):
+    permission_required = 'catalog.pode_criar_atualizar_autor'
+    model = Autor
+    fields = ['nome','sobrenome','data_nascimento','data_morte']
+    
+
+class AutorUpdate(PermissionRequiredMixin,UpdateView):
+    permission_required = 'catalog.pode_criar_atualizar_autor'
+    model = Autor
+    fields = '__all__'
+
+
+class AutorDelete(PermissionRequiredMixin,DeleteView):
+    permission_required = 'catalog.pode_deletar_autor'
+    model = Autor
+    success_url = reverse_lazy('autores')
