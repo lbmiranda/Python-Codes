@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic.base import TemplateView
 from . import views
 
 urlpatterns = [
@@ -13,4 +14,8 @@ urlpatterns = [
     path('autor/criar/', views.AutorCreate.as_view(), name = 'autor-create'),
     path('autor/<int:pk>/atualizar/', views.AutorUpdate.as_view(), name = 'autor-update'),
     path('autor/<int:pk>/deletar/', views.AutorDelete.as_view(), name = 'autor-delete'),
+    path('livro/criar/', views.CriarLivro.as_view(), name = 'livro-create'),
+    path('livro/<int:pk>/atualizar/', views.AtualizarLivro.as_view(), name = 'livro-update'),
+    path('livro/<int:pk>/deletar/', views.DeletarLivro.as_view(), name = 'livro-delete'),
+    path('erro/', TemplateView.as_view(template_name='erro_delete.html'), name='erro-deletar'),
 ]

@@ -18,5 +18,3 @@ class FormRenovaLivros(forms.Form):
 
         return data
 
-        
-

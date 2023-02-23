@@ -4,11 +4,13 @@ from .models import Livro,Autor,InstanciaLivro
 from .forms import FormRenovaLivros
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from django.utils.decorators import method_decorator
+from django.db.models import ProtectedError
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 # Create your views here.
 
@@ -96,20 +98,39 @@ def renova_livro_bibliotecario(request, pk):
 
     return render(request, 'catalog/renova_livro_bibliotecario.html', context)
 
-
 class AutorCreate(PermissionRequiredMixin,CreateView):
     permission_required = 'catalog.pode_criar_atualizar_autor'
     model = Autor
     fields = ['nome','sobrenome','data_nascimento','data_morte']
     
-
 class AutorUpdate(PermissionRequiredMixin,UpdateView):
     permission_required = 'catalog.pode_criar_atualizar_autor'
     model = Autor
     fields = '__all__'
 
-
 class AutorDelete(PermissionRequiredMixin,DeleteView):
     permission_required = 'catalog.pode_deletar_autor'
     model = Autor
     success_url = reverse_lazy('autores')
+
+class CriarLivro(PermissionRequiredMixin,CreateView):
+    permission_required = 'catalog.pode_criar_atualizar_livro'
+    model = Livro
+    fields = ['titulo','autor','sumario','isbn','genero','idioma']
+
+class AtualizarLivro(PermissionRequiredMixin,UpdateView):
+    permission_required = 'catalog.pode_criar_atualizar_livro'
+    model = Livro
+    fields = ['titulo','autor','sumario','isbn','genero','idioma']    
+
+class DeletarLivro(PermissionRequiredMixin,DeleteView):
+    permission_required = 'catalog.pode_deletar_livro'
+    model = Livro
+    success_url = reverse_lazy('livros')
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return self.delete(request, *args, **kwargs)
+        except ProtectedError:
+            return HttpResponseRedirect('/catalog/erro')
+

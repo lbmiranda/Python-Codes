@@ -12,7 +12,8 @@
 
     <p>
       {% if user.is_staff %}
-        <li><a href="{% url 'autor-update' autor.pk %}">Atualizar autor</a></li>}
+        <li><a href="{% url 'autor-update' autor.pk %}">Atualizar autor</a></li>
+        <li><a href="{% url 'autor-delete' autor.pk %}">Deletar autor</a></li>
       {% endif %}
     </p>
 

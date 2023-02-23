@@ -9,6 +9,14 @@
   <p><strong>Idioma:</strong> {{ livro.idioma }}</p>
   <p><strong>Genero:</strong> {{ livro.genero.all|join:", " }}</p>
 
+  <p>
+    {% if user.is_staff %}
+      <li><a href="{% url 'livro-update' livro.pk %}">Atualizar livro</a></li>
+      <li><a href="{% url 'livro-delete' livro.pk %}">Deletar livro</a></li>
+    {% endif %}
+  </p>
+
+
   <div style="margin-left:20px;margin-top:20px">
     <h4>Copias</h4>
 

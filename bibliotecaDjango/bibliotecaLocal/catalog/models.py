@@ -17,7 +17,6 @@ class Genero(models.Model):
         
         return self.nome
 
-
 class Idioma(models.Model):
     name = models.CharField(max_length=200, help_text='Informe o idioma do livro')
 
@@ -48,10 +47,12 @@ class Livro(models.Model):
 
     mostra_genero.short_description = 'Genero'
 
+    class Meta:
+        permissions = [('pode_criar_atualizar_livro','Cria/Atualiza Livro'),('pode_deletar_livro','Deleta livro')]
 
 class InstanciaLivro(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='ID único para este livro em particular')
-    livro = models.ForeignKey('Livro', on_delete=models.RESTRICT, null = True)
+    livro = models.ForeignKey('Livro', on_delete=models.PROTECT, null = True)
     edicao = models.CharField(max_length=200)
     data_devolucao = models.DateField(null=True, blank=True)
     emprestado_para = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -83,7 +84,6 @@ class InstanciaLivro(models.Model):
     def atrasado(self):
         """Verifica se um livro está atrasado baseado na data corrente"""
         return bool(self.data_devolucao and date.today() > self.data_devolucao)
-
 
 class Autor(models.Model):
     nome = models.CharField(max_length=100)
