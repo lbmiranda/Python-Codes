@@ -1,0 +1,21 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+<h1>TESTE H1</h1>
+<br>
+
+<h2>TESTE H2</h2>
+<br>
+
+<p>O aplicativo conta com os seguintes registros:</p>
+<br>
+<div class='lista-dados'>
+    <ul>
+        <li><strong>Entidades cadastradas:</strong>{{ num_entidades }} </li>
+        <li><strong>Publico cadastrado:</strong>{{ num_publico }} </li>
+        <li><strong>Número de visitas site:</strong>{{ num_visitas_site}}</li>
+    </ul>
+</div>
+
+
+{% endblock %}

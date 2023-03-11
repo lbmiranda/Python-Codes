@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+
+        {% block title %}<title>Webapp Doações</title>{% endblock %}
+		<meta charset="utf-8">
+        {% load static %}
+        <link rel="stylesheet" type ='text/css' href="{% static 'css/reset.css' %}">
+        <link rel="stylesheet" type ='text/css' href="{% static 'css/style.css' %}">
+
+		<title>Webapp Doações</title>	
+	</head>
+
+	<body>
+		<header>
+			<div class="imagem-centro">
+                {% load static %}                    
+				<h1><img src="{% static 'imagens/doação-alimentos.png' %}" alt="logo doação alimentos"></h1>
+			</div>
+		</header>
+
+		<!--menu-->
+		<div class="topnav">
+        {% block sidebar %}
+			<nav>
+				<ul>
+					<li><a href="{% url 'index' %}" class="active">Home</a></li>
+					<li><a href="">Acesso entidades</a></li>
+					<li><a href="">Acesso público geral</a></li>
+					<li><a href="">Pesquisa - necessidades</a></li>
+					<div class="topnav-right">
+						<li><a href="">Login</a></li>					
+					</div>
+				</ul>
+			</nav>
+		</div>
+		{% endblock %}
+
+
+		<!-- barra navegação lateral -->
+		<div class="sidenav">
+		  <a href="{% url 'entidades' %}">Entidades cadastradas</a>
+		  <a href="#">Necessidades de material</a>
+		  <a href="#">Necessidades de serviços</a>		  
+		</div>
+
+		<!-- conteudo principal -->
+		<div class="main">
+			{% block content %}{% endblock %}			
+		</div>
+
+		<footer>			
+			<p class="copyright">&copy; Copyright TCC 19908515 - 2023</p>
+		</footer>
+
+
+	</body>
+
+</html>
+</html>

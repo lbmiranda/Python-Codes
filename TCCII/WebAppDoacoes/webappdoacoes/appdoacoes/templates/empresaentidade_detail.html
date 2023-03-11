@@ -1,0 +1,20 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Entidade: {{ empresaentidade.nome_fantasia }}</h1>
+
+    <p><strong>CNPJ:</strong>{{ empresaentidade.cnpj }}</p>
+    <p><strong>Nome fantasia:</strong> {{ empresaentidade.nome_fantasia }}</p>
+    <p><strong>Endereço:</strong> {{ empresaentidade.endereco }}</p>
+    <p><strong>Contato:</strong> {{ empresaentidade.email }}</p>
+    
+  
+    <div style="margin-left:20px;margin-top:20px">
+      <h4>Materiais e serviços solicitados</h4>
+        <br>
+        <p>A ser implementado</p>     
+        <br>   
+    </div>
+
+{% endblock %}

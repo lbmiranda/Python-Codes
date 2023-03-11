@@ -1,0 +1,14 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Lista de entidades cadastradas</h1>
+    <br>
+
+    <ul>
+    {% for entidade in lista_entidade %}
+        <li><a>{{ entidade }}</a> {{ entidade.cnpj }}</li>    
+    {% endfor %}
+    </ul>
+
+{% endblock %}
