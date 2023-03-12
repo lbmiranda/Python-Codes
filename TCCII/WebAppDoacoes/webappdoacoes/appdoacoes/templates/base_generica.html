@@ -29,7 +29,12 @@
 					<li><a href="">Acesso público geral</a></li>
 					<li><a href="">Pesquisa - necessidades</a></li>
 					<div class="topnav-right">
-						<li><a href="">Login</a></li>					
+						{% if user.is_authenticated %}
+							<li class="username">Usuário: {{ user.get_username }}</li>
+							<li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
+						{% else %}
+							<li><a href="{% url 'login' %}">Login</a></li>
+						{% endif %}
 					</div>
 				</ul>
 			</nav>
@@ -49,9 +54,11 @@
 			{% block content %}{% endblock %}			
 		</div>
 
-		<footer>			
-			<p class="copyright">&copy; Copyright TCC 19908515 - 2023</p>
-		</footer>
+		{% block footer %}
+			<footer>			
+				<p class="copyright">&copy; Copyright TCC 19908515 - 2023</p>
+			</footer>
+		{% endblock %}
 
 
 	</body>

@@ -7,3 +7,9 @@ urlpatterns = [
     path('entidades/<str:pk>',views.EmpresaEntidadeDetailView.as_view(),name='empresaentidade-detail'),
 ]
 
+#Urls para registro de usuário
+
+urlpatterns += [
+    path('registrar/', views.registrar_usuario, name='registrar'),
+]
+

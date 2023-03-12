@@ -1,0 +1,40 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    {% if form.errors %}    
+        <p style='color:red'>Usuário ou senha incorretos/inexistentes. Por favor tente novamente</p>
+        <br>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Sua conta não possui acesso a esta página. Para prosseguir, por favor faça o login com uma conta que possua este acesso</p>
+        {% else %}
+            <p>Por favor faça o login para visualizar esta página</p>
+        {% endif %}
+    {% endif %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td class="tabela">{{ form.username.label_tag }}</td>
+            <td class="tabela">{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td class="tabela">{{ form.password.label_tag }}</td>
+            <td class="tabela">{{ form.password }}</td>
+        </tr>
+    </table>
+
+    <input type="submit" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
+    
+</form>
+
+<br>
+<p><a href="{% url 'password_reset' %}">Esqueceu sua senha?</a></p>
+<span><a href="{% url 'registrar' %}">Criar novo usuário</a></span>
+
+{% endblock %}

@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
-
 # Create your views here.
 
 from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, DonativoMaterialOuServico,InstanciaMaterial
+
+
 
 def index(request):
     """Função para apresentar a página principal do aplicativo."""
@@ -32,3 +33,15 @@ class EmpresaEntidadeDetailView(generic.DetailView):
     model = EmpresaEntidade
     template_name = 'empresaentidade_detail.html'
     context_object_name = 'empresaentidade'
+
+from .forms import FormCriarUsuario
+
+def registrar_usuario(request):
+    if request.method == 'POST':
+        form = FormCriarUsuario(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login') 
+    else:
+        form = FormCriarUsuario()
+    return render(request,'registrar.html',{'form': form})

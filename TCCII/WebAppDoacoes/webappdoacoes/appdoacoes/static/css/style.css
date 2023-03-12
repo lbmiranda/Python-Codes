@@ -37,6 +37,21 @@ header {
 	float: right;
 }
 
+.topnav-right li {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.topnav-right .username {
+  margin-right: 10px;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-bottom: 3px solid transparent;
+}
+
 .sidenav {  
   width: 280px; 
   position: relative; 
@@ -81,4 +96,9 @@ footer {
 	color: #BBBBBB;
 	font-size: 13px;
 	margin-top: 20px;
+}
+
+.tabela {
+  margin: 10px;
+  padding: 10px;
 }

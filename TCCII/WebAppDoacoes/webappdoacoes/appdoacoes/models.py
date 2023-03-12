@@ -8,6 +8,9 @@ from django.urls import reverse
 class User(AbstractUser):
     pass
 
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 class EmpresaEntidade(models.Model):
     cnpj = models.CharField(primary_key=True, max_length=14)
     nome_fantasia = models.CharField(max_length=100)
