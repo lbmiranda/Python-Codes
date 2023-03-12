@@ -14,16 +14,6 @@ class FormCriarUsuario(UserCreationForm):
         fields = ['username','email']
 
 
-# class FormCadastrarMaterial(forms.Form):
 
-#     def validacao_positivo(valor):
-#         if valor < 0:
-#             raise ValidationError('A quantidade deve ser positiva.')
-
-#     quantidade = forms.IntegerField(validators=[validacao_positivo])
-    
-
-#     class Meta:
-#         model = InstanciaMaterial
 
 

@@ -24,9 +24,7 @@
         {% block sidebar %}
 			<nav>
 				<ul>
-					<li><a href="{% url 'index' %}" class="active">Home</a></li>
-					<li><a href="">Acesso entidades</a></li>
-					<li><a href="">Acesso público geral</a></li>
+					<li><a href="{% url 'index' %}" class="active">Home</a></li>					
 					<li><a href="">Pesquisa - necessidades</a></li>
 					<div class="topnav-right">
 						{% if user.is_authenticated %}

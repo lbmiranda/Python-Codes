@@ -4,6 +4,7 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
+from django.core.validators import RegexValidator
 
 class User(AbstractUser):
     pass
@@ -12,47 +13,58 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class EmpresaEntidade(models.Model):
-    cnpj = models.CharField(primary_key=True, max_length=14)
+    cnpj = models.CharField(primary_key=True, max_length=14, validators=[RegexValidator(r'^\d{14}$', 'CNPJ deve conter 14 digitos')])
     nome_fantasia = models.CharField(max_length=100)
-    endereco = models.ForeignKey('Endereco', on_delete=models.CASCADE)
     email = models.EmailField(null=True)
+    usuario_responsavel = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,blank=True)
+    logradouro = models.CharField(max_length=100, null=True,blank=True)
+    numero = models.CharField(max_length=10, null=True,blank=True)
+    bairro = models.CharField(max_length=50, null=True,blank=True)
+    cidade = models.CharField(max_length=50, null=True,blank=True)
+    estado = models.CharField(max_length=2, null=True,blank=True)
+
+    @property
+    def get_endereco(self):
+        return f'{self.logradouro}, {self.numero} - {self.bairro}, {self.cidade}/{self.estado}'
 
     def get_absolute_url(self):
-        return reverse("entidade", args={self.cnpj})
+        return reverse("empresaentidade-detail", args=[self.cnpj])
 
     def __str__(self):
         return self.nome_fantasia
-      
-class PessoaComunidade(models.Model):
-    cpf = models.CharField(max_length=11, primary_key=True)
+
+class Comunidade(models.Model):
+    email = models.EmailField()
+
+class PessoaComunidade(Comunidade):
+    cpf = models.CharField(max_length=11, primary_key=True,validators=[RegexValidator(r'^\d{11}$', 'CPF deve conter 11 digitos')])
     nome = models.CharField(max_length=100)
     sobrenome = models.CharField(max_length=100)
-    endereco = models.ForeignKey('Endereco', on_delete=models.CASCADE)
-    email = models.EmailField(null=True)    
+    comunidade_ptr = models.OneToOneField(
+        Comunidade,
+        on_delete=models.CASCADE,
+        parent_link=True,
+        related_name='pessoacomunidade_set',
+        null=True
+    )
 
     def __str__(self):
         return f'{self.nome}, {self.sobrenome}'
     
-class EmpresaComunidade(models.Model):
-    cnpj = models.CharField(primary_key=True, max_length=14)
+class EmpresaComunidade(Comunidade):
+    cnpj = models.CharField(primary_key=True, max_length=14,validators=[RegexValidator(r'^\d{14}$', 'CNPJ deve conter 14 digitos')])
     nome_fantasia = models.CharField(max_length=100)
-    endereco = models.ForeignKey('Endereco', on_delete=models.CASCADE)
-    email = models.EmailField(null=True)
+    comunidade_ptr = models.OneToOneField(
+        Comunidade,
+        on_delete=models.CASCADE,
+        parent_link=True,
+        related_name='empresacomunidade_set',
+        null=True
+    )
 
     def __str__(self):
-        return self.nome_fantasia
-    
+        return self.nome_fantasia    
 
-class Endereco(models.Model):
-    logradouro = models.CharField(max_length=100)
-    numero = models.CharField(max_length=10)
-    bairro = models.CharField(max_length=50)
-    cidade = models.CharField(max_length=50)
-    estado = models.CharField(max_length=2)
-
-    def __str__(self):
-        return f'{self.logradouro}, {self.numero} - {self.bairro}, {self.cidade}/{self.estado}'
-    
 class DonativoMaterialOuServico(models.Model):
     id = models.AutoField(primary_key=True)
     descricao = models.CharField(max_length=200, unique=True)
@@ -83,7 +95,7 @@ class InstanciaMaterial(models.Model):
         permissions = [('pode_criar_atualizar_material_servico','Cria/Atualiza Necessidade')]
 
     def __str__(self):
-        return 'ID: {0} - (Material: {1} - Entidade: {2} - Quantidade: {3})'.format(self.id, self.material.nome_abreviado,self.entidade,self.quantidade)
+        return 'ID: {0} - (Entidade: {1} - Quantidade: {2})'.format(self.id,self.entidade,self.quantidade)
     
 class Categoria(models.Model):
     codigo_categoria = models.AutoField(primary_key=True)

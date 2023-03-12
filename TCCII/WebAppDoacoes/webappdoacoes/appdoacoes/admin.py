@@ -7,7 +7,7 @@ from .models import User
 
 admin.site.register(User, UserAdmin)
 
-from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, DonativoMaterialOuServico, Categoria,Endereco, InstanciaMaterial
+from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, DonativoMaterialOuServico, Categoria, InstanciaMaterial
 
 @admin.register(EmpresaEntidade)
 class EmpresaEntidadeAdmin(admin.ModelAdmin):
@@ -28,5 +28,4 @@ class DonativoAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PessoaComunidade)
-admin.site.register(Endereco)
 admin.site.register(InstanciaMaterial)

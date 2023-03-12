@@ -7,7 +7,10 @@
 
     <ul>
     {% for entidade in lista_entidade %}
-        <li><a>{{ entidade }}</a> {{ entidade.cnpj }}</li>    
+        <li>
+            Nome fantasia:
+            <a href=" {{ entidade.get_absolute_url }}">{{ entidade.nome_fantasia }}</a> CNPJ: {{ entidade.cnpj }}
+        </li>    
     {% endfor %}
     </ul>
 

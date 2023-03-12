@@ -12,9 +12,14 @@
   
     <div style="margin-left:20px;margin-top:20px">
       <h4>Materiais e serviços solicitados</h4>
-        <br>
-        <p>A ser implementado</p>     
-        <br>   
+      <br>
+        <ul>
+          {% for instancia in instanciamaterial_list %}
+            <li>{{ instancia.material.descricao }} - {{ instancia.quantidade }} {{ instancia.material.unidade }}</li>
+          {% empty %}
+            <li>Nenhum material encontrado.</li>
+          {% endfor %}
+        </ul>
     </div>
 
 {% endblock %}

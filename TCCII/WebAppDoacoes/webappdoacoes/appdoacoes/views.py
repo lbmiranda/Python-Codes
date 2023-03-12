@@ -4,8 +4,6 @@ from django.views import generic
 
 from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, DonativoMaterialOuServico,InstanciaMaterial
 
-
-
 def index(request):
     """Função para apresentar a página principal do aplicativo."""
     
@@ -21,8 +19,7 @@ def index(request):
     }
     
     return render(request,'index.html', context = context)
-        
-    
+  
 
 def lista_entidades(request):
     lista_entidade = EmpresaEntidade.objects.all()
@@ -40,6 +37,12 @@ class EmpresaEntidadeDetailView(generic.DetailView):
     template_name = 'empresaentidade_detail.html'
     context_object_name = 'empresaentidade'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        instanciamaterial_list = InstanciaMaterial.objects.filter(entidade=self.object)
+        context['instanciamaterial_list'] = instanciamaterial_list
+        return context
+
 from .forms import FormCriarUsuario
 
 def registrar_usuario(request):
@@ -51,14 +54,6 @@ def registrar_usuario(request):
     else:
         form = FormCriarUsuario()
     return render(request,'registrar.html',{'form': form})
-
-# from .forms import FormCadastrarMaterial
-
-# def criar_instanciamaterial(request):
-#     form = FormCadastrarMaterial(request.POST or None)
-#     if form.is_valid():
-#         form.save()
-#     return render(request, 'instanciamaterial_form.html', {'form': form})
 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin

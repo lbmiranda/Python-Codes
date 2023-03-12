@@ -1,10 +1,10 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('entidades/', views.lista_entidades, name='entidades'),
-    path('entidades/<str:pk>',views.EmpresaEntidadeDetailView.as_view(),name='empresaentidade-detail'),
+    re_path(r'^entidades/(?P<pk>\d{14})/$',views.EmpresaEntidadeDetailView.as_view(),name='empresaentidade-detail'),
     path('materiais_servicos/', views.lista_materiais_servicos, name='materiais-servicos'),
 ]
 
