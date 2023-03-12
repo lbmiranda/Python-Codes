@@ -55,7 +55,6 @@ class Endereco(models.Model):
     
 class DonativoMaterialOuServico(models.Model):
     id = models.AutoField(primary_key=True)
-    nome_abreviado = models.CharField(max_length=100)
     descricao = models.CharField(max_length=200, unique=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
 
@@ -72,13 +71,16 @@ class DonativoMaterialOuServico(models.Model):
     unidade = models.CharField(max_length=3, choices=UNIDADES_MEDIDA, blank=True, null=True)
 
     def __str__(self):
-        return '{0} - {1} ({2})'.format(self.id, self.nome_abreviado, self.descricao)
+        return '{0} - {1}'.format(self.id, self.descricao)
 
 class InstanciaMaterial(models.Model):
     id = models.AutoField(primary_key=True)
     material = models.ForeignKey('DonativoMaterialOuServico', null=True, on_delete=models.CASCADE)
     entidade = models.ForeignKey('EmpresaEntidade', null=True, on_delete=models.CASCADE)
     quantidade = models.IntegerField()
+
+    class Meta:
+        permissions = [('pode_criar_atualizar_material_servico','Cria/Atualiza Necessidade')]
 
     def __str__(self):
         return 'ID: {0} - (Material: {1} - Entidade: {2} - Quantidade: {3})'.format(self.id, self.material.nome_abreviado,self.entidade,self.quantidade)

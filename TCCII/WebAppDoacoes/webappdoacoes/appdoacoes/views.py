@@ -29,6 +29,12 @@ def lista_entidades(request):
     context = {'lista_entidade': lista_entidade}
     return render(request, 'empresaentidade_list.html', context)
 
+
+def lista_materiais_servicos(request):
+    lista_material_servico = DonativoMaterialOuServico.objects.all()
+    context = {'lista_material_servico': lista_material_servico}
+    return render(request, 'material_servico_list.html', context)
+
 class EmpresaEntidadeDetailView(generic.DetailView):
     model = EmpresaEntidade
     template_name = 'empresaentidade_detail.html'
@@ -45,3 +51,20 @@ def registrar_usuario(request):
     else:
         form = FormCriarUsuario()
     return render(request,'registrar.html',{'form': form})
+
+# from .forms import FormCadastrarMaterial
+
+# def criar_instanciamaterial(request):
+#     form = FormCadastrarMaterial(request.POST or None)
+#     if form.is_valid():
+#         form.save()
+#     return render(request, 'instanciamaterial_form.html', {'form': form})
+
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+
+class IntanciaMaterialCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_material_servico'
+    model = InstanciaMaterial
+    fields = ['material','entidade','quantidade']

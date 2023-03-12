@@ -22,8 +22,11 @@ class CategoriaAdmin(admin.ModelAdmin):
     list_display = ('tipo','descricao')
     list_filter = ('tipo','descricao')
 
+@admin.register(DonativoMaterialOuServico)
+class DonativoAdmin(admin.ModelAdmin):
+    list_display = ('id','descricao','categoria','unidade')
+
 
 admin.site.register(PessoaComunidade)
-admin.site.register(DonativoMaterialOuServico)
 admin.site.register(Endereco)
 admin.site.register(InstanciaMaterial)
