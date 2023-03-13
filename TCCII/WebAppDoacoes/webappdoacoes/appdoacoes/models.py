@@ -82,6 +82,9 @@ class DonativoMaterialOuServico(models.Model):
 
     unidade = models.CharField(max_length=3, choices=UNIDADES_MEDIDA, blank=True, null=True)
 
+    class Meta:
+        permissions = [('pode_criar_atualizar_donativo','Cria/Atualiza Donativo'),('pode_deletar_donativo','Deleta Donativo')]
+
     def __str__(self):
         return '{0} - {1}'.format(self.id, self.descricao)
 
@@ -91,24 +94,27 @@ class InstanciaMaterial(models.Model):
     entidade = models.ForeignKey('EmpresaEntidade', null=True, on_delete=models.CASCADE)
     quantidade = models.IntegerField()
 
-    class Meta:
-        permissions = [('pode_criar_atualizar_material_servico','Cria/Atualiza Necessidade')]
-
     def __str__(self):
         return 'ID: {0} - (Entidade: {1} - Quantidade: {2})'.format(self.id,self.entidade,self.quantidade)
     
 class Categoria(models.Model):
     codigo_categoria = models.AutoField(primary_key=True)
-    MATERIAL = 'M'
-    SERVICO = 'S'
+    MATERIAL = 'Material'
+    SERVICO = 'Serviço'
     CATEGORIA_CHOICES = [
         (MATERIAL, 'Material'),
         (SERVICO, 'Serviço'),
     ]
-    tipo = models.CharField(max_length=1, choices=CATEGORIA_CHOICES)
+    tipo = models.CharField(max_length=8, choices=CATEGORIA_CHOICES)
 
 
     descricao = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        permissions = [('pode_criar_atualizar_categoria','Cria/Atualiza categoria'),('pode_deletar_categoria','Deleta categoria')]
+
     def __str__(self):
         return self.descricao
+    
+    def get_absolute_url(self):
+        return reverse("categoria-detail", args=[self.codigo_categoria])

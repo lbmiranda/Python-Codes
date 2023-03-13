@@ -1,0 +1,20 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Lista de categorias cadastradas</h1>
+    <br>
+
+    <ul>
+    {% for categoria in categoria_list %}
+        <li>
+            Código da categoria: <a href=" {{ categoria.get_absolute_url }}">{{ categoria.codigo_categoria }} </a> <br>
+            Descrição: {{ categoria.descricao }} - {{ categoria.tipo }}            
+        </li>  
+        <br>  
+    {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'categoria-create' %}">Cadastrar categoria</a></p>
+
+{% endblock %}

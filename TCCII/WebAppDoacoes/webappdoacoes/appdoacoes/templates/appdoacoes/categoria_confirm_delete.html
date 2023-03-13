@@ -1,0 +1,14 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+<h1>Deletar categoria</h1>
+
+<p>Você tem certeza que quer deletar este registro? <strong> {{ categoria }} </strong></p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" value="Sim, deletar." />
+</form>
+
+{% endblock %}

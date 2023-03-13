@@ -1,0 +1,20 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Categoria: {{ categoria.pk }}</h1>
+
+    <p><strong>Descrição:</strong>{{ categoria.descricao }}</p>
+    <p><strong>Tipo:</strong> {{ categoria.tipo }}</p>
+ 
+    <p>
+        {% if user.is_staff %}
+          <br>
+          <li><a href="{% url 'categoria-update' categoria.pk %}">Atualizar categoria</a></li>
+          <li><a href="{% url 'categoria-delete' categoria.pk %}">Deletar categoria</a></li>
+        {% endif %}
+    </p>
+  
+ 
+
+{% endblock %}

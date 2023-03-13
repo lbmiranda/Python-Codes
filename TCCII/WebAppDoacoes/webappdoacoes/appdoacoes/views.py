@@ -1,8 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views import generic
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _
+from .forms import FormCriarUsuario
 # Create your views here.
 
-from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, DonativoMaterialOuServico,InstanciaMaterial
+from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, DonativoMaterialOuServico,InstanciaMaterial,Categoria
 
 def index(request):
     """Função para apresentar a página principal do aplicativo."""
@@ -19,18 +25,22 @@ def index(request):
     }
     
     return render(request,'index.html', context = context)
-  
 
 def lista_entidades(request):
     lista_entidade = EmpresaEntidade.objects.all()
     context = {'lista_entidade': lista_entidade}
     return render(request, 'empresaentidade_list.html', context)
 
-
 def lista_materiais_servicos(request):
     lista_material_servico = DonativoMaterialOuServico.objects.all()
     context = {'lista_material_servico': lista_material_servico}
     return render(request, 'material_servico_list.html', context)
+
+class CategoriaListView(generic.ListView):
+    model = Categoria
+
+class CategoriaDetailView(generic.DetailView):
+    model = Categoria
 
 class EmpresaEntidadeDetailView(generic.DetailView):
     model = EmpresaEntidade
@@ -43,8 +53,6 @@ class EmpresaEntidadeDetailView(generic.DetailView):
         context['instanciamaterial_list'] = instanciamaterial_list
         return context
 
-from .forms import FormCriarUsuario
-
 def registrar_usuario(request):
     if request.method == 'POST':
         form = FormCriarUsuario(request.POST)
@@ -55,11 +63,42 @@ def registrar_usuario(request):
         form = FormCriarUsuario()
     return render(request,'registrar.html',{'form': form})
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.decorators import login_required, permission_required
+class DonativoCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
+    model = DonativoMaterialOuServico
+    fields = ('descricao','categoria','unidade')
 
-class IntanciaMaterialCreate(PermissionRequiredMixin, CreateView):
-    permission_required = 'appdoacoes.pode_criar_atualizar_material_servico'
-    model = InstanciaMaterial
-    fields = ['material','entidade','quantidade']
+class DonativoUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
+    model = DonativoMaterialOuServico
+    fields = ('descricao','categoria','unidade')
+
+class DonativoDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = 'appdoacoes.pode_deletar_donativo'
+    model = DonativoMaterialOuServico
+    success_url = reverse_lazy('materiais-servicos')
+
+class CategoriaCreate(PermissionRequiredMixin,CreateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
+    model = Categoria
+    fields = ('tipo','descricao')
+
+class CategoriaUpdate(PermissionRequiredMixin,UpdateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
+    model = Categoria
+    fields = ('tipo','descricao')
+    success_url = reverse_lazy('categoria-list')
+
+class CategoriaDelete(PermissionRequiredMixin,DeleteView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
+    model = Categoria
+    success_url = reverse_lazy('categoria-list')
+
+class RegistroNecessidadeCreate(PermissionRequiredMixin,CreateView):
+    pass
+
+class RegistroNecessidadeUpdate(PermissionRequiredMixin,UpdateView):
+    pass
+
+class RegistroNecessidadeDelete(PermissionRequiredMixin,DeleteView):
+    pass
