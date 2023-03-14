@@ -16,19 +16,53 @@ class EmpresaEntidade(models.Model):
     cnpj = models.CharField(primary_key=True, max_length=14, validators=[RegexValidator(r'^\d{14}$', 'CNPJ deve conter 14 digitos')])
     nome_fantasia = models.CharField(max_length=100)
     email = models.EmailField(null=True)
-    usuario_responsavel = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,blank=True)
+    usuario_responsavel = models.OneToOneField(User, on_delete=models.SET_NULL, null=True,blank=True)
     logradouro = models.CharField(max_length=100, null=True,blank=True)
     numero = models.CharField(max_length=10, null=True,blank=True)
     bairro = models.CharField(max_length=50, null=True,blank=True)
     cidade = models.CharField(max_length=50, null=True,blank=True)
-    estado = models.CharField(max_length=2, null=True,blank=True)
+    
+    ESTADOS = [
+        ('AC', 'Acre'),
+        ('AL', 'Alagoas'),
+        ('AP', 'Amapá'),
+        ('AM', 'Amazonas'),
+        ('BA', 'Bahia'),
+        ('CE', 'Ceará'),
+        ('DF', 'Distrito Federal'),
+        ('ES', 'Espírito Santo'),
+        ('GO', 'Goiás'),
+        ('MA', 'Maranhão'),
+        ('MT', 'Mato Grosso'),
+        ('MS', 'Mato Grosso do Sul'),
+        ('MG', 'Minas Gerais'),
+        ('PA', 'Pará'),
+        ('PB', 'Paraíba'),
+        ('PR', 'Paraná'),
+        ('PE', 'Pernambuco'),
+        ('PI', 'Piauí'),
+        ('RJ', 'Rio de Janeiro'),
+        ('RN', 'Rio Grande do Norte'),
+        ('RS', 'Rio Grande do Sul'),
+        ('RO', 'Rondônia'),
+        ('RR', 'Roraima'),
+        ('SC', 'Santa Catarina'),
+        ('SP', 'São Paulo'),
+        ('SE', 'Sergipe'),
+        ('TO', 'Tocantins')
+    ]
+    
+    estado = models.CharField(max_length=2, choices=ESTADOS, null=True,blank=True)
+
+    class Meta:
+        permissions = [('pode_criar_atualizar_entidade','Cria/Atualiza Entidade'),('pode_deletar_entidade','Deleta Entidade')]
 
     @property
     def get_endereco(self):
         return f'{self.logradouro}, {self.numero} - {self.bairro}, {self.cidade}/{self.estado}'
 
     def get_absolute_url(self):
-        return reverse("empresaentidade-detail", args=[self.cnpj])
+        return reverse("entidade-detail", args=[self.cnpj])
 
     def __str__(self):
         return self.nome_fantasia
@@ -65,7 +99,7 @@ class EmpresaComunidade(Comunidade):
     def __str__(self):
         return self.nome_fantasia    
 
-class DonativoMaterialOuServico(models.Model):
+class Donativo(models.Model):
     id = models.AutoField(primary_key=True)
     descricao = models.CharField(max_length=200, unique=True)
     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
@@ -87,15 +121,21 @@ class DonativoMaterialOuServico(models.Model):
 
     def __str__(self):
         return '{0} - {1}'.format(self.id, self.descricao)
+    
+    def get_absolute_url(self):
+        return reverse("donativo-detail", args=[self.id])
 
-class InstanciaMaterial(models.Model):
+class InstanciaDonativo(models.Model):
     id = models.AutoField(primary_key=True)
-    material = models.ForeignKey('DonativoMaterialOuServico', null=True, on_delete=models.CASCADE)
+    material = models.ForeignKey('Donativo', null=True, on_delete=models.CASCADE)
     entidade = models.ForeignKey('EmpresaEntidade', null=True, on_delete=models.CASCADE)
     quantidade = models.IntegerField()
 
     def __str__(self):
         return 'ID: {0} - (Entidade: {1} - Quantidade: {2})'.format(self.id,self.entidade,self.quantidade)
+    
+    def get_absolute_url(self):
+        return reverse("instancia-detail", args=[self.id])
     
 class Categoria(models.Model):
     codigo_categoria = models.AutoField(primary_key=True)

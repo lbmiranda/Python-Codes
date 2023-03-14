@@ -1,0 +1,14 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Donativos cadastrados</h1>
+    <br>
+
+    <ul>
+    {% for registro in lista_donativos %}
+        <li><a href=" {{ registro.get_absolute_url }}">{{ registro.id }}</a> {{ registro.categoria }} - {{ registro.descricao }}</li>    
+    {% endfor %}
+    </ul>
+
+{% endblock %}

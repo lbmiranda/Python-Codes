@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from .forms import FormCriarUsuario
 # Create your views here.
 
-from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, DonativoMaterialOuServico,InstanciaMaterial,Categoria
+from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, Donativo,InstanciaDonativo,Categoria
 
 def index(request):
     """Função para apresentar a página principal do aplicativo."""
@@ -26,21 +26,11 @@ def index(request):
     
     return render(request,'index.html', context = context)
 
+#Entidades ListView
 def lista_entidades(request):
     lista_entidade = EmpresaEntidade.objects.all()
     context = {'lista_entidade': lista_entidade}
     return render(request, 'empresaentidade_list.html', context)
-
-def lista_materiais_servicos(request):
-    lista_material_servico = DonativoMaterialOuServico.objects.all()
-    context = {'lista_material_servico': lista_material_servico}
-    return render(request, 'material_servico_list.html', context)
-
-class CategoriaListView(generic.ListView):
-    model = Categoria
-
-class CategoriaDetailView(generic.DetailView):
-    model = Categoria
 
 class EmpresaEntidadeDetailView(generic.DetailView):
     model = EmpresaEntidade
@@ -49,9 +39,24 @@ class EmpresaEntidadeDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        instanciamaterial_list = InstanciaMaterial.objects.filter(entidade=self.object)
-        context['instanciamaterial_list'] = instanciamaterial_list
+        instanciadonativos_list = InstanciaDonativo.objects.filter(entidade=self.object)
+        context['instanciadonativos_list'] = instanciadonativos_list
         return context
+
+#Donativos ListView
+def lista_donativos(request):
+    lista_donativos = Donativo.objects.all()
+    context = {'lista_donativos': lista_donativos}
+    return render(request, 'donativos_list.html', context)
+
+class DonativoDetailView(generic.DetailView):
+    model = Donativo
+
+class CategoriaListView(generic.ListView):
+    model = Categoria
+
+class CategoriaDetailView(generic.DetailView):
+    model = Categoria
 
 def registrar_usuario(request):
     if request.method == 'POST':
@@ -65,18 +70,18 @@ def registrar_usuario(request):
 
 class DonativoCreate(PermissionRequiredMixin, CreateView):
     permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
-    model = DonativoMaterialOuServico
+    model = Donativo
     fields = ('descricao','categoria','unidade')
 
 class DonativoUpdate(PermissionRequiredMixin, UpdateView):
     permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
-    model = DonativoMaterialOuServico
+    model = Donativo
     fields = ('descricao','categoria','unidade')
 
 class DonativoDelete(PermissionRequiredMixin, DeleteView):
     permission_required = 'appdoacoes.pode_deletar_donativo'
-    model = DonativoMaterialOuServico
-    success_url = reverse_lazy('materiais-servicos')
+    model = Donativo
+    success_url = reverse_lazy('donativo-list')
 
 class CategoriaCreate(PermissionRequiredMixin,CreateView):
     permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
@@ -102,3 +107,30 @@ class RegistroNecessidadeUpdate(PermissionRequiredMixin,UpdateView):
 
 class RegistroNecessidadeDelete(PermissionRequiredMixin,DeleteView):
     pass
+
+class EmpresaEntidadeCreate(PermissionRequiredMixin,CreateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_entidade'
+    model = EmpresaEntidade
+    fields = ['nome_fantasia', 'cnpj', 'email', 'logradouro', 'numero', 'bairro', 'cidade', 'estado']
+
+    def form_valid(self, form):
+        form.instance.usuario_responsavel = self.request.user
+        return super().form_valid(form)
+
+class EmpresaEntidadeUpdate(UserPassesTestMixin, PermissionRequiredMixin,UpdateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_entidade'
+    model = EmpresaEntidade
+    fields = ['nome_fantasia', 'cnpj', 'email', 'logradouro', 'numero', 'bairro', 'cidade', 'estado']
+
+    def test_func(self):
+        empresa_entidade = self.get_object()
+        return self.request.user == empresa_entidade.usuario_responsavel or self.request.user.is_staff
+
+class EmpresaEntidadeDelete(UserPassesTestMixin,PermissionRequiredMixin,DeleteView):
+    permission_required = 'appdoacoes.pode_deleter_entidade'
+    model = Categoria
+    success_url = reverse_lazy('entidades')
+
+    def test_func(self):
+        empresa_entidade = self.get_object()
+        return self.request.user == empresa_entidade.usuario_responsavel or self.request.user.is_staff

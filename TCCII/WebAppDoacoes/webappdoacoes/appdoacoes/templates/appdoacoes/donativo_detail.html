@@ -1,0 +1,20 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Donativo: {{ donativo.pk }}</h1>
+
+    <p><strong>Descrição:</strong>{{ donativo.descricao }}</p>
+    <p><strong>Tipo:</strong> {{ donativo.categoria }}</p>
+ 
+    <p>
+        {% if user.is_staff %}
+          <br>
+          <li><a href="{% url 'donativo-update' donativo.pk %}">Atualizar donativo</a></li>
+          <li><a href="{% url 'donativo-delete' donativo.pk %}">Deletar donativo</a></li>
+        {% endif %}
+    </p>
+  
+ 
+
+{% endblock %}
