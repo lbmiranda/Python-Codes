@@ -11,11 +11,11 @@
     
   
     <div style="margin-left:20px;margin-top:20px">
-      <h4>Materiais e serviços solicitados</h4>
+      <h4>Donativos necessários</h4>
       <br>
         <ul>
-          {% for instancia in instanciamaterial_list %}
-            <li>{{ instancia.material.descricao }} - {{ instancia.quantidade }} {{ instancia.material.unidade }}</li>
+          {% for instancia in registronecessidade_list %}
+            <li>{{ instancia.donativo.descricao }} - {{ instancia.quantidade }} {{ instancia.donativo.unidade }}</li>
           {% empty %}
             <li>Nenhum material encontrado.</li>
           {% endfor %}

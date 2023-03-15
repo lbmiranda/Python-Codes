@@ -1,0 +1,21 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Necessidade: {{ instanciadonativo.pk }}</h1>
+
+    <p><strong>Donativo:</strong>{{ instanciadonativo.donativo }}</p>
+    <p><strong>Entidade:</strong> {{ instanciadonativo.entidade }}</p>
+    <p><strong>Quantidade:</strong> {{ instanciadonativo.quantidade }}</p>
+ 
+    <p>
+        {% if user.is_staff %}
+          <br>
+          <li><a href="{% url 'necessidade-update' instanciadonativo.pk %}">Atualizar necessidade</a></li>
+          <li><a href="{% url 'necessidade-delete' instanciadonativo.pk %}">Deletar necessidade</a></li>
+        {% endif %}
+    </p>
+  
+ 
+
+{% endblock %}

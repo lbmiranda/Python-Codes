@@ -4,10 +4,7 @@ from . import views
 #Página principal
 
 urlpatterns = [
-    path('', views.index, name='index'),
-
-    
- 
+    path('', views.index, name='index'), 
 ]
 
 #Listas e views detalhadas
@@ -19,8 +16,9 @@ urlpatterns += [
     path('donativos/<int:pk>/', views.DonativoDetailView.as_view(), name='donativo-detail'),
     path('categorias/', views.CategoriaListView.as_view(),name='categoria-list'),
     path('categorias/<int:pk>/', views.CategoriaDetailView.as_view(),name='categoria-detail'),
+    path('necessidades/', views.RegistroNecessidadeListView.as_view(),name='necessidades-list'),
+    path('necessidades/<int:pk>/', views.RegistroNecessidadeDetailView.as_view(),name='necessidade-detail'),
 ]
-
 
 #Urls para registro de usuário
 
@@ -40,6 +38,8 @@ urlpatterns += [
     path('categorias/criar/', views.CategoriaCreate.as_view(),name='categoria-create'),    
     path('categorias/<int:pk>/atualizar/', views.CategoriaUpdate.as_view(),name='categoria-update'),
     path('categorias/<int:pk>/deletar/', views.CategoriaDelete.as_view(),name='categoria-delete'),
-    #path('cadastrar_necessidade/', views.criar_instanciamaterial, name='registrar-necessidade'),
+    path('necessidades/criar/', views.RegistroNecessidadeCreate.as_view(),name='necessidade-create'),    
+    path('necessidades/<int:pk>/atualizar/', views.RegistroNecessidadeUpdate.as_view(),name='necessidade-update'),
+    path('necessidades/<int:pk>/deletar/', views.RegistroNecessidadeDelete.as_view(),name='necessidade-delete'),
 ]
 

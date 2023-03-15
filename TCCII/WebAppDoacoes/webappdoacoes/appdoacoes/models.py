@@ -7,7 +7,19 @@ from django.urls import reverse
 from django.core.validators import RegexValidator
 
 class User(AbstractUser):
-    pass
+    COMUNIDADEPF = 'comunidade-PF'
+    COMUNIDADEPJ = 'comunidade-PJ'
+    ENTIDADE = 'entidade'
+    TIPO_CONTA_CHOICES = (
+        (COMUNIDADEPF, 'Comunidade PF'),
+        (COMUNIDADEPJ, 'Comunidade PJ'),
+        (ENTIDADE, 'Entidade'),
+    )
+    tipo_de_conta = models.CharField(max_length=20, choices=TIPO_CONTA_CHOICES)
+
+    entidade = models.ForeignKey("EmpresaEntidade", verbose_name=("Entidade"), on_delete=models.RESTRICT, null=True,blank=True)
+    comunidade_pf = models.ForeignKey("PessoaComunidade",verbose_name=('Comunidade PF'),on_delete=models.RESTRICT, null=True,blank=True)
+    comunidade_pj = models.ForeignKey("EmpresaComunidade",verbose_name=('Comunidade PJ'),on_delete=models.RESTRICT, null=True,blank=True)
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -18,7 +30,7 @@ class EmpresaEntidade(models.Model):
     email = models.EmailField(null=True)
     usuario_responsavel = models.OneToOneField(User, on_delete=models.SET_NULL, null=True,blank=True)
     logradouro = models.CharField(max_length=100, null=True,blank=True)
-    numero = models.CharField(max_length=10, null=True,blank=True)
+    numero = models.IntegerField(null=True,blank=True)
     bairro = models.CharField(max_length=50, null=True,blank=True)
     cidade = models.CharField(max_length=50, null=True,blank=True)
     
@@ -127,15 +139,18 @@ class Donativo(models.Model):
 
 class InstanciaDonativo(models.Model):
     id = models.AutoField(primary_key=True)
-    material = models.ForeignKey('Donativo', null=True, on_delete=models.CASCADE)
+    donativo = models.ForeignKey('Donativo', null=True, on_delete=models.CASCADE)
     entidade = models.ForeignKey('EmpresaEntidade', null=True, on_delete=models.CASCADE)
     quantidade = models.IntegerField()
 
+    class Meta:
+        permissions = [('pode_criar_atualizar_necessidade','Cria/Atualiza necessidade'),('pode_deletar_necessidade','Deleta necessidade')]
+    
     def __str__(self):
         return 'ID: {0} - (Entidade: {1} - Quantidade: {2})'.format(self.id,self.entidade,self.quantidade)
     
     def get_absolute_url(self):
-        return reverse("instancia-detail", args=[self.id])
+        return reverse("necessidade-detail", args=[self.id])
     
 class Categoria(models.Model):
     codigo_categoria = models.AutoField(primary_key=True)

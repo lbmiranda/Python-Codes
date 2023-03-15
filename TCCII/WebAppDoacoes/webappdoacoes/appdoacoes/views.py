@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin
-from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from .forms import FormCriarUsuario
@@ -32,6 +31,7 @@ def lista_entidades(request):
     context = {'lista_entidade': lista_entidade}
     return render(request, 'empresaentidade_list.html', context)
 
+#Entidades DetailView
 class EmpresaEntidadeDetailView(generic.DetailView):
     model = EmpresaEntidade
     template_name = 'empresaentidade_detail.html'
@@ -39,75 +39,11 @@ class EmpresaEntidadeDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        instanciadonativos_list = InstanciaDonativo.objects.filter(entidade=self.object)
-        context['instanciadonativos_list'] = instanciadonativos_list
+        registronecessidade_list = InstanciaDonativo.objects.filter(entidade=self.object)
+        context['registronecessidade_list'] = registronecessidade_list
         return context
 
-#Donativos ListView
-def lista_donativos(request):
-    lista_donativos = Donativo.objects.all()
-    context = {'lista_donativos': lista_donativos}
-    return render(request, 'donativos_list.html', context)
-
-class DonativoDetailView(generic.DetailView):
-    model = Donativo
-
-class CategoriaListView(generic.ListView):
-    model = Categoria
-
-class CategoriaDetailView(generic.DetailView):
-    model = Categoria
-
-def registrar_usuario(request):
-    if request.method == 'POST':
-        form = FormCriarUsuario(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login') 
-    else:
-        form = FormCriarUsuario()
-    return render(request,'registrar.html',{'form': form})
-
-class DonativoCreate(PermissionRequiredMixin, CreateView):
-    permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
-    model = Donativo
-    fields = ('descricao','categoria','unidade')
-
-class DonativoUpdate(PermissionRequiredMixin, UpdateView):
-    permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
-    model = Donativo
-    fields = ('descricao','categoria','unidade')
-
-class DonativoDelete(PermissionRequiredMixin, DeleteView):
-    permission_required = 'appdoacoes.pode_deletar_donativo'
-    model = Donativo
-    success_url = reverse_lazy('donativo-list')
-
-class CategoriaCreate(PermissionRequiredMixin,CreateView):
-    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
-    model = Categoria
-    fields = ('tipo','descricao')
-
-class CategoriaUpdate(PermissionRequiredMixin,UpdateView):
-    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
-    model = Categoria
-    fields = ('tipo','descricao')
-    success_url = reverse_lazy('categoria-list')
-
-class CategoriaDelete(PermissionRequiredMixin,DeleteView):
-    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
-    model = Categoria
-    success_url = reverse_lazy('categoria-list')
-
-class RegistroNecessidadeCreate(PermissionRequiredMixin,CreateView):
-    pass
-
-class RegistroNecessidadeUpdate(PermissionRequiredMixin,UpdateView):
-    pass
-
-class RegistroNecessidadeDelete(PermissionRequiredMixin,DeleteView):
-    pass
-
+#Entidades Create-Update-Delete
 class EmpresaEntidadeCreate(PermissionRequiredMixin,CreateView):
     permission_required = 'appdoacoes.pode_criar_atualizar_entidade'
     model = EmpresaEntidade
@@ -134,3 +70,101 @@ class EmpresaEntidadeDelete(UserPassesTestMixin,PermissionRequiredMixin,DeleteVi
     def test_func(self):
         empresa_entidade = self.get_object()
         return self.request.user == empresa_entidade.usuario_responsavel or self.request.user.is_staff
+
+#Donativos ListView
+def lista_donativos(request):
+    lista_donativos = Donativo.objects.all()
+    context = {'lista_donativos': lista_donativos}
+    return render(request, 'donativos_list.html', context)
+
+#Donativos DetailView
+class DonativoDetailView(generic.DetailView):
+    model = Donativo
+
+#Donativos Create-Update-Delete
+class DonativoCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
+    model = Donativo
+    fields = ('descricao','categoria','unidade')
+
+class DonativoUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_donativo'
+    model = Donativo
+    fields = ('descricao','categoria','unidade')
+
+class DonativoDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = 'appdoacoes.pode_deletar_donativo'
+    model = Donativo
+    success_url = reverse_lazy('donativo-list')
+
+#Categoria ListView
+class CategoriaListView(generic.ListView):
+    model = Categoria
+
+#Categoria DetailView
+class CategoriaDetailView(generic.DetailView):
+    model = Categoria
+
+#Categoria Create-Update-Delete
+class CategoriaCreate(PermissionRequiredMixin,CreateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
+    model = Categoria
+    fields = ('tipo','descricao')
+
+class CategoriaUpdate(PermissionRequiredMixin,UpdateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
+    model = Categoria
+    fields = ('tipo','descricao')
+    success_url = reverse_lazy('categoria-list')
+
+class CategoriaDelete(PermissionRequiredMixin,DeleteView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_categoria'
+    model = Categoria
+    success_url = reverse_lazy('categoria-list')
+
+#InstanciaDonativo ListView
+class RegistroNecessidadeListView(generic.ListView):
+    model=InstanciaDonativo
+
+#InstanciaDonativo DetailView
+class RegistroNecessidadeDetailView(generic.DetailView):
+    model=InstanciaDonativo
+
+#InstanciaDonativo Create-Update-Delete
+class RegistroNecessidadeCreate(PermissionRequiredMixin,CreateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_necessidade'
+    model = InstanciaDonativo
+    fields = ('donativo','entidade','quantidade')
+
+    def test_func(self):
+        instancia_donativo = self.get_object()
+        return self.request.user == instancia_donativo.entidade.usuario_responsavel or self.request.user.is_staff
+
+class RegistroNecessidadeUpdate(PermissionRequiredMixin,UpdateView):
+    permission_required = 'appdoacoes.pode_criar_atualizar_necessidade'    
+    model = InstanciaDonativo
+    fields = ('donativo','entidade','quantidade')
+
+    def test_func(self):
+        instancia_donativo = self.get_object()
+        return self.request.user == instancia_donativo.entidade.usuario_responsavel or self.request.user.is_staff
+
+class RegistroNecessidadeDelete(PermissionRequiredMixin,DeleteView):
+    permission_required = 'appdoacoes.pode_deleter_necessidade'
+    model = InstanciaDonativo
+    success_url = reverse_lazy('necessidades-list')
+
+    def test_func(self):
+        instancia_donativo = self.get_object()
+        return self.request.user == instancia_donativo.entidade.usuario_responsavel or self.request.user.is_staff
+
+#Registro de usuário
+def registrar_usuario(request):
+    if request.method == 'POST':
+        form = FormCriarUsuario(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login') 
+    else:
+        form = FormCriarUsuario()
+    return render(request,'registrar.html',{'form': form})

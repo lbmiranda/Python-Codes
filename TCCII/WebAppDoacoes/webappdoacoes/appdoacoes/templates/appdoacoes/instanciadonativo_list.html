@@ -1,0 +1,20 @@
+{% extends "base_generica.html" %}
+
+{% block content %}
+
+    <h1>Lista de necessidades cadastradas</h1>
+    <br>
+
+    <ul>
+    {% for instancia in registronecessidade_list %}
+        <li>
+            Código da categoria: <a href=" {{ necessidade.get_absolute_url }}">{{ necessidade.id }} </a> <br>
+            Descrição: {{ necessidade.entidade }} - {{ necessidade.donativo }} - {{ necessidade.quantidade }}            
+        </li>  
+        <br>  
+    {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'necessidade-create' %}">Cadastrar necessidade</a></p>
+
+{% endblock %}
