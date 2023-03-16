@@ -7,14 +7,29 @@
       <li class="username">Usuário: {{ user.get_username }}</li>
       <li><a href="{% url 'logout' %}">Logout</a></li>
     {% else %}
-      <h2>Registrar</h2>
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Registrar</button>
-      </form>
-    {% endif %}
+      <h2><strong>Registrar usuário</strong></h2>
+      <br>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
   
-    {% endblock %}
+      {% if form.errors %}
+          <div class="alert alert-danger">
+              {% for field in form %}
+                  {% for error in field.errors %}
+                      <strong>{{ field.label }}:</strong> {{ error }}
+                  {% endfor %}
+              {% endfor %}
+          </div>
+      {% endif %}
+      
+      <br>
+      <button type="submit">Registrar</button>
+  </form>
+
+  {% endif %}
+  
+  {% endblock %}
 
 
