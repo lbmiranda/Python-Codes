@@ -18,7 +18,7 @@ urlpatterns += [
     path('categorias/<int:pk>/', views.CategoriaDetailView.as_view(),name='categoria-detail'),
     path('necessidades/', views.RegistroNecessidadeListView.as_view(),name='necessidades-list'),
     path('necessidades/<int:pk>/', views.RegistroNecessidadeDetailView.as_view(),name='necessidade-detail'),
-    path('perfil/<int:usuario>/', views.PerfilUsuarioDetailView.as_view(),name='perfil-detail'),    
+    path('perfil/', views.perfil_usuario_update,name='perfil-usuario'),    
 ]
 
 #Urls para registro de usuário
@@ -41,7 +41,6 @@ urlpatterns += [
     path('categorias/<int:pk>/deletar/', views.CategoriaDelete.as_view(),name='categoria-delete'),
     path('necessidades/criar/', views.RegistroNecessidadeCreate.as_view(),name='necessidade-create'),    
     path('necessidades/<int:pk>/atualizar/', views.RegistroNecessidadeUpdate.as_view(),name='necessidade-update'),
-    path('necessidades/<int:pk>/deletar/', views.RegistroNecessidadeDelete.as_view(),name='necessidade-delete'),
-    path('perfil/<int:usuario>/atualizar', views.perfil_usuario_update,name='perfil-update'),
+    path('necessidades/<int:pk>/deletar/', views.RegistroNecessidadeDelete.as_view(),name='necessidade-delete'),    
 ]
 

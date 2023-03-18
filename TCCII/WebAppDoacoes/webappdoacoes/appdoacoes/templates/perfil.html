@@ -1,0 +1,9 @@
+{% extends "base_generica.html" %}
+{% block title %}Perfil{% endblock title %}
+{% block content %}
+    <div>
+        <h1>Página de perfil para o usuário: {{ perfil_usuario }}</h1>
+        <p>Detalhes: {{ perfil_usuario.detalhes }} </p>
+    </div>
+
+{% endblock content %}

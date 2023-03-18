@@ -28,7 +28,8 @@
 					<li><a href="">Pesquisa - necessidades</a></li>
 					<div class="topnav-right">
 						{% if user.is_authenticated %}
-							<li class="username">Usuário: {{ user.get_username }}</li>
+							<li class="username">Usuário:</li>
+							<li><a href={% url 'perfil-usuario' %}>{{ user.get_username }}</a></li>
 							<li><a href="{% url 'logout' %}">Logout</a></li>
 						{% else %}
 							<li><a href="{% url 'login' %}">Login</a></li>

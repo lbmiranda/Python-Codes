@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMi
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from .forms import FormCriarUsuario,FormPerfilUsuario
+from .forms import FormCriarUsuario
 # Create your views here.
 
 from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, Donativo,InstanciaDonativo,Categoria,PerfilUsuario
@@ -27,26 +27,14 @@ def index(request):
     
     return render(request,'index.html', context = context)
 
-class PerfilUsuarioDetailView(LoginRequiredMixin, generic.DetailView):
-    model = PerfilUsuario    
 
 @login_required
-def perfil_usuario_update(request,usuario):
-
-    perfil_usuario = get_object_or_404(PerfilUsuario, usuario = usuario)
-
-    if request.method == 'POST' and perfil_usuario.usuario == request.user:
-        form = FormPerfilUsuario(request.POST, instance=perfil_usuario)
-
-        if form.is_valid():    
-            perfil_usuario.save()
-
-            return HttpResponseRedirect(reverse('perfil-detail',args=[perfil_usuario.slug])) 
-
-    return render(request, 'appdoacoes/perfil_usuario_update.html',{'form': form})
-
-
-
+def perfil_usuario_update(request):
+    usuario_logado = request.user
+    perfil_usuario = get_object_or_404(PerfilUsuario, usuario=usuario_logado)
+    context = {'perfil_usuario': perfil_usuario}
+    return render(request,'perfil.html',context)
+    
 
 #Entidades ListView
 def lista_entidades(request):

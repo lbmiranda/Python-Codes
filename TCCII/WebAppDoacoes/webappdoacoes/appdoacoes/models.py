@@ -26,7 +26,10 @@ User = get_user_model()
 
 class PerfilUsuario(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    detalhes = models.CharField(max_length=10000,blank=True,null=True)
+    detalhes = models.TextField(null=True)
+
+    def __str__(self):
+        return self.usuario.username
 
 class EmpresaEntidade(models.Model):
     cnpj = models.CharField(primary_key=True, max_length=14, validators=[RegexValidator(r'^\d{14}$', 'CNPJ deve conter 14 digitos')])

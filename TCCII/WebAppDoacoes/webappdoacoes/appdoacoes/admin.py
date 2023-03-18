@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User,PerfilUsuario
 
 class CustomUserAdmin(UserAdmin):
     model = User
@@ -23,6 +23,8 @@ class CustomUserAdmin(UserAdmin):
     )
 
 admin.site.register(User, CustomUserAdmin)
+
+admin.site.register(PerfilUsuario)
 
 from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, Donativo, Categoria, InstanciaDonativo
 
