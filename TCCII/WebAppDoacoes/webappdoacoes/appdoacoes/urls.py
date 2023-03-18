@@ -18,7 +18,7 @@ urlpatterns += [
     path('categorias/<int:pk>/', views.CategoriaDetailView.as_view(),name='categoria-detail'),
     path('necessidades/', views.RegistroNecessidadeListView.as_view(),name='necessidades-list'),
     path('necessidades/<int:pk>/', views.RegistroNecessidadeDetailView.as_view(),name='necessidade-detail'),
-    path('perfil/', views.perfil_usuario_update,name='perfil-usuario'),    
+    path('perfil/', views.perfil_usuario,name='perfil-usuario'),    
 ]
 
 #Urls para registro de usuário
@@ -33,7 +33,6 @@ urlpatterns += [
     path('donativos/criar/', views.DonativoCreate.as_view(), name='donativo-create'),
     path('donativos/<int:pk>/atualizar/', views.DonativoUpdate.as_view(), name='donativo-update'),
     path('donativos/<int:pk>/deletar/', views.DonativoDelete.as_view(), name='donativo-delete'),
-    path('entidades/criar/', views.EmpresaEntidadeCreate.as_view(), name='entidade-create'),
     re_path(r'^entidades/(?P<pk>\d{14})/$/atualizar',views.EmpresaEntidadeUpdate.as_view(),name='entidade-update'),
     re_path(r'^entidades/(?P<pk>\d{14})/$/deletar',views.EmpresaEntidadeDelete.as_view(),name='entidade-delete'),
     path('categorias/criar/', views.CategoriaCreate.as_view(),name='categoria-create'),    

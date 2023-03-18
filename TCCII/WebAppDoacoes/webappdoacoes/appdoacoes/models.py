@@ -16,6 +16,7 @@ class User(AbstractUser):
         (ENTIDADE, 'Entidade'),
     )
     tipo_de_conta = models.CharField(max_length=20, choices=TIPO_CONTA_CHOICES)
+    email = models.EmailField(unique=True)
 
     entidade = models.ForeignKey("EmpresaEntidade", verbose_name=("Entidade"), on_delete=models.RESTRICT, null=True,blank=True)
     comunidade_pf = models.ForeignKey("PessoaComunidade",verbose_name=('Comunidade PF'),on_delete=models.RESTRICT, null=True,blank=True)

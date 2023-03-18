@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin,LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from .forms import FormCriarUsuario
-# Create your views here.
+from .forms import FormCriarUsuario, FormPerfilUsuario, FormEntidadeCreate,FormEmpresaComunidadeCreate,FormPessoaComunidadeCreate
+
+
 
 from .models import EmpresaEntidade, EmpresaComunidade, PessoaComunidade, Donativo,InstanciaDonativo,Categoria,PerfilUsuario
 
@@ -27,14 +27,54 @@ def index(request):
     
     return render(request,'index.html', context = context)
 
-
 @login_required
-def perfil_usuario_update(request):
+def perfil_usuario(request):
+    
     usuario_logado = request.user
     perfil_usuario = get_object_or_404(PerfilUsuario, usuario=usuario_logado)
-    context = {'perfil_usuario': perfil_usuario}
-    return render(request,'perfil.html',context)
+    entidade_perfil = perfil_usuario.usuario.entidade
+    pf_perfil = perfil_usuario.usuario.comunidade_pf
+    pj_perfil = perfil_usuario.usuario.comunidade_pj
     
+    
+    form_atualizar_perfil = FormPerfilUsuario(request.POST or None, instance = perfil_usuario)
+    form_criar_entidade = FormEntidadeCreate(request.POST or None, instance=EmpresaEntidade())
+    form_criar_pf = FormPessoaComunidadeCreate(request.POST or None, instance = PessoaComunidade()) 
+    form_criar_pj = FormEmpresaComunidadeCreate(request.POST or None, instance=EmpresaComunidade())
+    
+    if form_atualizar_perfil.is_valid():
+        form_atualizar_perfil.save()
+
+    if form_criar_entidade.is_valid():
+        empresa_entidade = form_criar_entidade.save(commit=False)
+        empresa_entidade.usuario_responsavel = usuario_logado                 
+        empresa_entidade.save()
+        perfil_usuario.usuario.entidade = empresa_entidade
+        perfil_usuario.usuario.save()
+    
+    if form_criar_pf.is_valid():
+        comunidade_pf = form_criar_pf.save(commit=False)
+        perfil_usuario.usuario.comunidade_pf = comunidade_pf
+        form_criar_pf.save()
+        perfil_usuario.usuario.save()
+
+    if form_criar_pj.is_valid():
+        comunidade_pj = form_criar_pj.save(commit=False)
+        perfil_usuario.usuario.comunidade_pj = comunidade_pj
+        form_criar_pj.save()
+        perfil_usuario.usuario.save()
+
+    context = {
+        'perfil_usuario': perfil_usuario,
+        'form_atualizar_perfil': form_atualizar_perfil,
+        'form_criar_entidade': form_criar_entidade,
+        'form_criar_pf': form_criar_pf,
+        'form_criar_pj': form_criar_pj,
+        'entidade_perfil': entidade_perfil,
+        'pj_perfil': pj_perfil,
+        'pf_perfil': pf_perfil,
+    }
+    return render(request,'perfil.html',context)
 
 #Entidades ListView
 def lista_entidades(request):
@@ -54,16 +94,7 @@ class EmpresaEntidadeDetailView(generic.DetailView):
         context['registronecessidade_list'] = registronecessidade_list
         return context
 
-#Entidades Create-Update-Delete
-class EmpresaEntidadeCreate(PermissionRequiredMixin,CreateView):
-    permission_required = 'appdoacoes.pode_criar_atualizar_entidade'
-    model = EmpresaEntidade
-    fields = ['nome_fantasia', 'cnpj', 'email', 'logradouro', 'numero', 'bairro', 'cidade', 'estado']
-
-    def form_valid(self, form):
-        form.instance.usuario_responsavel = self.request.user
-        return super().form_valid(form)
-
+#Entidades Update-Delete
 class EmpresaEntidadeUpdate(UserPassesTestMixin, PermissionRequiredMixin,UpdateView):
     permission_required = 'appdoacoes.pode_criar_atualizar_entidade'
     model = EmpresaEntidade
@@ -175,7 +206,8 @@ def registrar_usuario(request):
         form = FormCriarUsuario(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login') 
+            return redirect(('login')) 
     else:
         form = FormCriarUsuario()
     return render(request,'registrar.html',{'form': form})
+

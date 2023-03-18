@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, PerfilUsuario
+from .models import User, PerfilUsuario,EmpresaEntidade, PessoaComunidade,EmpresaComunidade
 from django.utils.translation import gettext_lazy as _ 
 
 
@@ -50,3 +50,23 @@ class FormPerfilUsuario(forms.ModelForm):
     class Meta:
         model = PerfilUsuario
         fields = ['detalhes'] 
+
+
+class FormEntidadeCreate(forms.ModelForm):
+    class Meta:
+        model = EmpresaEntidade    
+        permission_required = 'appdoacoes.pode_criar_atualizar_entidade'    
+        fields = ['nome_fantasia', 'cnpj', 'email', 'logradouro', 'numero', 'bairro', 'cidade', 'estado']
+
+
+class FormEmpresaComunidadeCreate(forms.ModelForm):
+    class Meta:
+        model = EmpresaComunidade
+        fields = ['cnpj','nome_fantasia']
+
+class FormPessoaComunidadeCreate(forms.ModelForm):
+    class Meta:
+        model = PessoaComunidade
+        fields = ['cpf','nome','sobrenome']
+
+
