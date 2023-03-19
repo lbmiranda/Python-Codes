@@ -1,0 +1,59 @@
+Feijão preto,kg,Alimentos
+Açucar,kg,Alimentos
+Sal,kg,Alimentos
+Feijão vermelho,kg,Alimentos
+Ervilha,kg,Alimentos
+Milho (espiga),kg,Alimentos
+Farinha de mandioca,kg,Alimentos
+Farinha de trigo,kg,Alimentos
+Ovo,un,Alimentos
+Banana,kg,Alimentos
+Maça,kg,Alimentos
+Pera,kg,Alimentos
+Fermento,un,Alimentos
+Pasta de amendoim,kg,Alimentos
+Alface,kg,Alimentos
+Tomate,kg,Alimentos
+Pimentão,kg,Alimentos
+Rucula,kg,Alimentos
+Lentilha,kg,Alimentos
+Milho (lata),un,Alimentos
+Tenis 38,p,Calçados
+Tenis 39,p,Calçados
+Tenis 40,p,Calçados
+Tenis 41,p,Calçados
+Camiseta P,un,Vestuario
+Camiseta M,un,Vestuario
+Camiseta G,un,Vestuario
+Colchão,un,Colchões e travesseiros
+Travesseiro,un,Colchões e travesseiros
+Mesa,un,Moveis
+Cadeira,un,Moveis
+Cama,un,Moveis
+Geladeira,un,Eletrodoméstico
+Fogão,un,Eletrodoméstico
+Lençol,un,Roupa de cama
+Cobertor,un,Roupa de cama
+Edredon,un,Roupa de cama
+Desinfetante,un,Produtos de limpeza
+Sabão em pó,un,Produtos de limpeza
+Detergente,un,Produtos de limpeza
+Sabonete,un,Produtos de higiene pessoal
+Shampoo,un,Produtos de higiene pessoal
+Cotonete,un,Produtos de higiene pessoal
+Absorvente,un,Produtos de higiene pessoal
+Escova de dentes,un,Produtos de higiene pessoal
+Pasta de dente,un,Produtos de higiene pessoal
+Aspirina,un,Medicamentos
+Transporte urbano,s,Transporte
+Transporte intermunicipal,s,Transporte
+Instalação de equipamento elétrico,s,Eletricista
+Manutenção de encanamento,s,Encanador
+Instalação de torneiras,s,Encanador
+Instalação de chuveiros,s,Encanador
+Manutenção de móveis,s,Marceneiro
+Água mineral,l,Bebidas
+Leite integral,l,Bebidas
+Suco de laranja,l,Bebidas
+Aulas de português,s,Educação
+Aulas de matemática,s,Educação

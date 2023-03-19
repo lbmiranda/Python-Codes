@@ -130,6 +130,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/appdoacoes/perfil'
 LOGOUT_REDIRECT_URL = 'logout'
+LOGIN_URL = '/contas/login/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ERROR_403_TEMPLATE = os.path.join(BASE_DIR, 'appdoacoes/templates/403.html')
