@@ -5,12 +5,66 @@
     <h1>Donativos cadastrados</h1>
     <br>
 
-    <ul>
+    <div>
+        <form method="get">
+            <input type="text" name="search" placeholder="Pesquisar...">
+            <button type="submit">Pesquisar</button>
+        </form>
+
+        <p><a href="?">Limpar pesquisa</a></p>
+    </div>
+
+    <br>
+    
+    <div>
+        <p>Filtrar por tipo:</p>
+        <ul>
+            <li><a href="?tipo=Material">Material</a></li>
+            <li><a href="?tipo=Serviço">Serviço</a></li> 
+            <li><a href="?">Todos</a></li>       
+        </ul>
+    </div>
+
+    <br>
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Código do donativo</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th>Unidade</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for registro in lista_donativos %}
+                <tr>
+                <td>
+                    <a href="{{ registro.get_absolute_url }}">{{ registro.id }}</a>
+                </td>
+                <td>{{ registro.categoria.tipo }}</td>
+                <td>{{ registro.descricao }}</td>
+                <td>{{ registro.unidade }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                <td colspan="3">Nenhum resultado encontrado.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>   
+    </div>
+
+    {% comment %} <ul>
     {% for registro in lista_donativos %}
         <li><a href=" {{ registro.get_absolute_url }}">{{ registro.id }}</a> {{ registro.categoria }} - {{ registro.descricao }}</li>    
     {% endfor %}
-    </ul>
+    </ul> {% endcomment %}
 
-    <p><a href="{% url 'donativo-create' %}">Cadastrar donativo</a></p>
+    {% if user.is_staff or perms.appdoacoes.pode_criar_atualizar_donativo %} 
+        <br>
+        <p><a href="{% url 'donativo-create' %}">Cadastrar donativo</a></p>    
+    {% endif %}
 
 {% endblock %}

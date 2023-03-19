@@ -169,8 +169,6 @@ class Categoria(models.Model):
         (SERVICO, 'Serviço'),
     ]
     tipo = models.CharField(max_length=8, choices=CATEGORIA_CHOICES)
-
-
     descricao = models.CharField(max_length=100, unique=True)
 
     class Meta:

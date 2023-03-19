@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMi
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from .forms import FormCriarUsuario, FormPerfilUsuario, FormEntidadeCreate,FormEmpresaComunidadeCreate,FormPessoaComunidadeCreate
+from django.db.models import Q
 
 
 
@@ -78,7 +79,16 @@ def perfil_usuario(request):
 
 #Entidades ListView
 def lista_entidades(request):
+    
+    termo_pesquisado = request.GET.get('search', '')
     lista_entidade = EmpresaEntidade.objects.all()
+    
+    if termo_pesquisado:
+        lista_entidade = lista_entidade.filter(
+            Q(cnpj__icontains=termo_pesquisado) |
+            Q(nome_fantasia__icontains=termo_pesquisado)            
+        )
+
     context = {'lista_entidade': lista_entidade}
     return render(request, 'empresaentidade_list.html', context)
 
@@ -115,7 +125,23 @@ class EmpresaEntidadeDelete(UserPassesTestMixin,PermissionRequiredMixin,DeleteVi
 
 #Donativos ListView
 def lista_donativos(request):
-    lista_donativos = Donativo.objects.all()
+    
+    termo_pesquisado = request.GET.get('search', '')
+    tipo = request.GET.get('tipo', '')
+    lista_donativos = Donativo.objects.all()    
+    
+    if tipo:
+        lista_donativos = lista_donativos.filter(categoria__tipo=tipo)
+
+    if termo_pesquisado:
+        lista_donativos = lista_donativos.filter(
+            Q(id__icontains=termo_pesquisado) |
+            Q(descricao__icontains=termo_pesquisado) |
+            Q(categoria__tipo__icontains=termo_pesquisado) |
+            Q(unidade__icontains=termo_pesquisado)
+        )
+
+
     context = {'lista_donativos': lista_donativos}
     return render(request, 'donativos_list.html', context)
 
@@ -142,6 +168,25 @@ class DonativoDelete(PermissionRequiredMixin, DeleteView):
 #Categoria ListView
 class CategoriaListView(generic.ListView):
     model = Categoria
+
+    def get_queryset(self):
+            qs = super().get_queryset()
+
+            # Filtrar por tipo
+            tipo = self.request.GET.get('tipo')
+            if tipo:
+                qs = qs.filter(tipo=tipo)
+
+            termo_pesquisado = self.request.GET.get('search')
+            if termo_pesquisado:
+                qs = qs.filter(
+                    Q(descricao__icontains=termo_pesquisado) |
+                    Q(codigo_categoria__icontains=termo_pesquisado) |
+                    Q(tipo__icontains=termo_pesquisado)
+                )
+
+            return qs
+    
 
 #Categoria DetailView
 class CategoriaDetailView(generic.DetailView):

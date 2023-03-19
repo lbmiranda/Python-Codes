@@ -15,6 +15,10 @@
     {% endfor %}
     </ul>
 
-    <p><a href="{% url 'necessidade-create' %}">Cadastrar necessidade</a></p>
+    {% if user.is_staff or perms.appdoacoes.pode_criar_atualizar_donativo %} 
+        <br>
+        <p><a href="{% url 'necessidade-create' %}">Cadastrar necessidade</a></p>   
+    {% endif %}
+    
 
 {% endblock %}
