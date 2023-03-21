@@ -1,9 +1,56 @@
 {% extends "base_generica.html" %}
 
 {% block content %}
+
+{% load static %}
+
+<section class="container-fluid justify-content-center">
+    <div class="row">
+        <div class="card col col-md-6 p-2 m-4" style="width: 18rem;">
+            <img src="{% static 'imagens/pexels-julia-m-cameron-6994929.jpg' %}" class="card-img-top" alt="Homem carregando doações de roupas">
+            <div class="card-body">
+            <h5 class="card-title">Entidades cadastradas</h5>
+            <p class="card-text">Ajude com o que puder, veja aqui a lista de entidades cadastradas!</p>
+            <a href="{% url 'entidade-list' %}" class="btn btn-primary">Entidades!</a>
+            </div>
+        </div>
+
+        <div class="card col col-md-6 p-2 m-4" style="width: 18rem;">
+            <img src="{% static 'imagens/pexels-julia-m-cameron-6994944.jpg' %}" class="card-img-top" alt="Latas e pacotes de alimentos">
+            <div class="card-body">
+            <h5 class="card-title">Categorias cadastradas</h5>
+            <p class="card-text">Veja aqui a lista de categorias cadastradas. Sugira novas opções, entre em contato!</p>
+            <a href="{% url 'categoria-list' %}" class="btn btn-primary">Categorias!</a>
+            </div>
+        </div>
+
+        <div class="card col col-md-6 p-2 m-4" style="width: 18rem;">
+            <img src="{% static 'imagens/pexels-julia-m-cameron-6994992.jpg' %}" class="card-img-top" alt="Pessoa seguranda cartaz com a frase: 'Voluntários necessários'">
+            <div class="card-body">
+            <h5 class="card-title">Donativos</h5>
+            <p class="card-text">Veja aqui os tipos de donativos cadastrados.</p>
+            <br>
+            <a href="{% url 'donativo-list' %}" class="btn btn-primary">Donativos!</a>
+            </div>
+        </div>
+
+        <div class="card col col-md-6 p-2 m-4" style="width: 18rem;">
+            <img src="{% static 'imagens/pexels-magda-ehlers-1300975.jpg' %}" class="card-img-top" alt="Caixas com frutas: bananas, maças, abacaxis e mamãos">
+            <div class="card-body">
+            <h5 class="card-title">Lista de necessidades</h5>
+            <p class="card-text">Acesse aqui a lista de necessidades cadastradas pelas diversas entidades</p>
+            <a href="{% url 'necessidades-list' %}" class="btn btn-primary">Ajude!</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<br>
 <p>O aplicativo conta com os seguintes registros:</p>
 <br>
-<div class='lista-dados'>
+<div>
     <ul>
         <li><strong>Entidades cadastradas:</strong>{{ num_entidades }} </li>
         <li><strong>Publico cadastrado:</strong>{{ num_publico }} </li>

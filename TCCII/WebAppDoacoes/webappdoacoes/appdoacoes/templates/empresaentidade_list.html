@@ -2,22 +2,22 @@
 
 {% block content %}
 
-    <h1>Lista de entidades cadastradas</h1>
-    <br>
+    <section class='d-flex flex-row justify-content-center p-2'>
+        <h1>Lista de entidades cadastradas</h1>
+    </section>
 
-    <div>
+    <div class='container'>
         <form method="get">
-            <input type="text" name="search" placeholder="Pesquisar...">
-            <button type="submit">Pesquisar</button>
+            <input class="form-control me-2 barra-pesquisa" type="text" name="search" placeholder="Pesquisar..." aria-label="Search">
+            <button class="btn btn-primary p-1 m-2" type="submit">Pesquisar</button>
         </form>
 
         <p><a href="?">Limpar pesquisa</a></p>
     </div>
 
-    <br>
-
-    <div>
-        <table>
+ 
+    <div class='container'>
+        <table class='table table-striped table-hover'>
             <thead>
             <tr>
                 <th>Nome fantasia</th>
@@ -28,7 +28,7 @@
             {% for entidade in lista_entidade %}
                 <tr>
                 <td>
-                    <a href="{{ entidade.get_absolute_url }}">{{ entidade.nome_fantasia }}</a>
+                    <a class='link-success' href="{{ entidade.get_absolute_url }}">{{ entidade.nome_fantasia }}</a>
                 </td>
                 <td>{{ entidade.cnpj }}</td>
                 </tr>

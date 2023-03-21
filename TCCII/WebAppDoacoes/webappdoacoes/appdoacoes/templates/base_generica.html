@@ -5,61 +5,77 @@
         {% block title %}<title>Webapp Doações</title>{% endblock title%}
 		<meta charset="utf-8">
         {% load static %}
-        <link rel="stylesheet" type ='text/css' href="{% static 'css/reset.css' %}">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <link rel="stylesheet" type ='text/css' href="{% static 'css/style.css' %}">
-
-		<title>Webapp Doações</title>	
+		
 	</head>
 
 	<body>
 		<header>
-			<div class="imagem-centro">
-                {% load static %}                    
-				<h1><img src="{% static 'imagens/doação-alimentos.png' %}" alt="logo doação alimentos"></h1>
-			</div>
+			<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" data-bs-theme='dark'>
+				<div class="container-fluid">
+				  <a class="navbar-brand" href="{% url 'index' %}">WebappDoacoes</a>
+				  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				  </button>
+				  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					  <li class="nav-item">
+						<a class="nav-link" href="{% url 'entidade-list' %}">Entidades</a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="{% url 'categoria-list' %}">Categorias</a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="{% url 'donativo-list' %}">Donativos</a>
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="{% url 'necessidades-list' %}">Necessidades</a>
+					  </li>
+					  <li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						  Menu
+						</a>
+						<ul class="dropdown-menu">
+						  <li><a class="dropdown-item" href="#">Cadastrar categoria</a></li>
+						  <li><a class="dropdown-item" href="#">Cadastrar donativo</a></li>
+						  <li><a class="dropdown-item" href="#">Cadastrar necessidade</a></li>
+						  <li><hr class="dropdown-divider"></li>
+						  <li><a class="dropdown-item" href="#">Listar necessidades</a></li>
+						</ul>
+					  </li>
+					</ul>	
+					<div>
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+							{% if user.is_authenticated %}
+								<li class="nav-link disabled">Usuário:</li>
+								<li class="nav-item"><a class="nav-link" href={% url 'perfil-usuario' %}>{{ user.get_username }}</a></li>
+								<li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+							{% else %}
+								<li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+							{% endif %}
+						</ul>					
+					</div>			
+				  </div>
+				</div>
+			  </nav>
 		</header>
 
-		<!--menu-->
-		<div class="topnav">
-        {% block sidebar %}
-			<nav>
-				<ul>
-					<li><a href="{% url 'index' %}" class="active">Home</a></li>					
-					<li><a href="">Pesquisa - necessidades</a></li>
-					<div class="topnav-right">
-						{% if user.is_authenticated %}
-							<li class="username">Usuário:</li>
-							<li><a href={% url 'perfil-usuario' %}>{{ user.get_username }}</a></li>
-							<li><a href="{% url 'logout' %}">Logout</a></li>
-						{% else %}
-							<li><a href="{% url 'login' %}">Login</a></li>
-						{% endif %}
-					</div>
-				</ul>
-			</nav>
-		</div>
-		{% endblock %}
-
-
-		<!-- barra navegação lateral -->
-		<div class="sidenav">
-		  <a href="{% url 'entidade-list' %}">Entidades cadastradas</a>
-		  <a href="{% url 'categoria-list' %}">Categorias cadastradas</a>
-		  <a href="{% url 'donativo-list' %}">Donativos cadastrados</a>
-		  <a href="{% url 'necessidades-list' %}">Lista de necessidades</a>	
-		</div>
-
+		
 		<!-- conteudo principal -->
-		<div class="main">
+		<section class='container-fluid'>
 			{% block content %}{% endblock %}			
-		</div>
+		</section>
 
 		{% block footer %}
-			<footer>			
-				<p class="copyright">&copy; Copyright TCC 19908515 - 2023</p>
+		<div class="container">
+			<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+				<p class="col-md-4 mb-0 text-muted">&copy; Copyright 2023 TCC 19908515</p>	 
 			</footer>
+		</div>
 		{% endblock %}
 
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
 	</body>
 

@@ -187,7 +187,6 @@ class CategoriaListView(generic.ListView):
 
             return qs
     
-
 #Categoria DetailView
 class CategoriaDetailView(generic.DetailView):
     model = Categoria

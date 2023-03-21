@@ -19,22 +19,23 @@
     {% csrf_token %}
     <table>
         <tr>
-            <td class="tabela">{{ form.username.label_tag }}</td>
-            <td class="tabela">{{ form.username }}</td>
+            <td class="p-2 m-3">{{ form.username.label_tag }}</td>
+            <td class="p-2 m-3">{{ form.username }}</td>
         </tr>
         <tr>
-            <td class="tabela">{{ form.password.label_tag }}</td>
-            <td class="tabela">{{ form.password }}</td>
+            <td class="p-2 m-3">{{ form.password.label_tag }}</td>
+            <td class="p-2 m-3">{{ form.password }}</td>
         </tr>
     </table>
 
-    <input type="submit" value="login">
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
     <input type="hidden" name="next" value="{{ next }}">
     
 </form>
 
-<br>
-<p><a href="{% url 'password_reset' %}">Esqueceu sua senha?</a></p>
-<span><a href="{% url 'registrar' %}">Criar novo usuário</a></span>
+<div>
+    <p class='p-2 m-3'><a href="{% url 'password_reset' %}">Esqueceu sua senha?</a></p>
+    <span class='p-2 m-3'><a href="{% url 'registrar' %}">Criar novo usuário</a></span>
+</div>
 
 {% endblock %}
