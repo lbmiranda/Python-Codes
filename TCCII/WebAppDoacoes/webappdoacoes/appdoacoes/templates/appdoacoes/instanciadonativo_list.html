@@ -18,11 +18,11 @@
     </div>
 
     <div class='d-inline-flex flex-row justify-content-center p-2 m-4'>
-        <p class='p-2'>Filtrar por tipo:</p>
+        <p class='p-2'>Ordenar por:</p>
         <ul class="list-group">
-            <li class="list-group-item"><a href="?tipo=Material">Material</a></li>
-            <li class="list-group-item"><a href="?tipo=Serviço">Serviço</a></li> 
-            <li class="list-group-item"><a href="?">Todos</a></li>       
+            <li class="list-group-item"><a href="?selecao=entidade">Entidade</a></li>
+            <li class="list-group-item"><a href="?selecao=donativo">Descrição</a></li>
+            <li class="list-group-item"><a href="?selecao=quantidade">Quantidade</a></li>     
         </ul>
     </div>
 
@@ -40,23 +40,37 @@
     <table class='table table-striped table-hover'>
         <thead>
         <tr>
-            <th>Código da necessidade</th>
+            <th>Entidade</th>
             <th>Descrição</th>
             <th>Quantidade</th>
-            <th>Unidade</th>
-            <th>Entidade</th>
+            <th>Unidade</th>  
+            <th>Deletar</th>
         </tr>
         </thead>
         <tbody>
             {% for instancia in instanciadonativo_list %}
             <tr>
-                <td>
-                    <a class='link-success' href="{{ instancia.get_absolute_url }}">{{ instancia.id }}</a>
-                </td>
+                <td><a href="{% url 'entidade-detail' pk=instancia.entidade.cnpj %}">{{ instancia.entidade }}</a></td>
                 <td>{{ instancia.donativo.descricao }}</td>
                 <td>{{ instancia.quantidade }}</td>
                 <td>{{ instancia.donativo.unidade }}</td>
-                <td>{{ instancia.entidade }}</td>
+                {% if user.is_staff or user == instancia.entidade.usuario_responsavel %}                
+                    <td> 
+                        <form method="post" action="{% url 'necessidade-delete' instancia.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i> Excluir
+                            </button>
+                        </form>
+                    </td>
+                {% else %}
+                <td>                   
+                    <button type="" class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i> Não autorizado
+                    </button>
+                </td>
+
+                {% endif %}                       
             </tr>
         {% empty %}
             <tr>
@@ -66,6 +80,7 @@
         </tbody>
     </table>   
 </div>
+
 
 
     

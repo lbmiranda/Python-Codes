@@ -51,13 +51,11 @@ class FormPerfilUsuario(forms.ModelForm):
         model = PerfilUsuario
         fields = ['detalhes'] 
 
-
 class FormEntidadeCreate(forms.ModelForm):
     class Meta:
         model = EmpresaEntidade    
         permission_required = 'appdoacoes.pode_criar_atualizar_entidade'    
         fields = ['nome_fantasia', 'cnpj', 'email', 'logradouro', 'numero', 'bairro', 'cidade', 'estado']
-
 
 class FormEmpresaComunidadeCreate(forms.ModelForm):
     class Meta:

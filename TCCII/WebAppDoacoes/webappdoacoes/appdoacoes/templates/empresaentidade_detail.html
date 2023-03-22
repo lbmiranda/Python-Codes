@@ -22,4 +22,8 @@
         </ul>
     </div>
 
+    {% if user.is_staff or user == instancia.entidade.usuario_responsavel %}    
+      <p><a href={% url 'necessidade-create' %}>Cadastrar necessidade</a></p>
+    {% endif %}
+
 {% endblock %}

@@ -1,0 +1,22 @@
+A fazer:
+
+- Aplicar CSS nas páginas:
+    * Detalhe entidade
+    * Cadastrar necessidade
+    * Detalhe categoria
+    * Atualizar categoria
+    * Deletar categoria
+    * Detalhe donativo
+    * Atualizar donativo
+    * Deletar donativo
+    * Registrar usuario
+    * Perfil usuario
+    * Esqueceu sua senha
+
+- Cadastrar entidades e usuarios
+- Cadastrar necessidades
+
+
+
+
+

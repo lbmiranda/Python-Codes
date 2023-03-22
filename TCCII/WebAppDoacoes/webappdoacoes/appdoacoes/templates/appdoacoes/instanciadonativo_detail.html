@@ -7,6 +7,8 @@
     <p><strong>Donativo:</strong>{{ instanciadonativo.donativo }}</p>
     <p><strong>Entidade:</strong> {{ instanciadonativo.entidade }}</p>
     <p><strong>Quantidade:</strong> {{ instanciadonativo.quantidade }}</p>
+
+    <p><a href="{% url 'necessidades-list' %}">Voltar para lista de necessidades cadastradas</a></p>
  
     <p>
         {% if user.is_staff %}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, PermissionRequiredMixin,LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from .forms import FormCriarUsuario, FormPerfilUsuario, FormEntidadeCreate,FormEmpresaComunidadeCreate,FormPessoaComunidadeCreate
@@ -17,6 +17,9 @@ def index(request):
     
     num_entidades = EmpresaEntidade.objects.all().count()
     num_publico = EmpresaComunidade.objects.all().count() + PessoaComunidade.objects.all().count()
+    num_categorias = Categoria.objects.all().count()
+    num_donativos = Donativo.objects.all().count()
+    num_necessidades = InstanciaDonativo.objects.all().count()
     num_visitas_site = request.session.get('num_visitas_site',0)
     request.session['num_visitas_site'] = num_visitas_site+1
     
@@ -24,6 +27,9 @@ def index(request):
         'num_entidades': num_entidades, 
         'num_publico': num_publico,
         'num_visitas_site': num_visitas_site,
+        'num_categorias': num_categorias,
+        'num_donativos': num_donativos,
+        'num_necessidades': num_necessidades,
     }
     
     return render(request,'index.html', context = context)
@@ -212,19 +218,70 @@ class CategoriaDelete(PermissionRequiredMixin,DeleteView):
 class RegistroNecessidadeListView(generic.ListView):
     model=InstanciaDonativo
 
+    def get_queryset(self):
+            qs = super().get_queryset()
+
+            selecao = self.request.GET.get('selecao')
+            if selecao == 'entidade':
+                qs = qs.order_by('entidade')
+            elif selecao == 'donativo':
+                qs = qs.order_by('donativo')
+            elif selecao == 'quantidade':
+                qs = qs.order_by('quantidade')
+            elif selecao == 'unidade':
+                qs = qs.order_by('unidade')
+            else:
+                qs = qs
+
+
+            termo_pesquisado = self.request.GET.get('search')
+            if termo_pesquisado:
+                qs = qs.filter(                    
+                    Q(quantidade__icontains=termo_pesquisado) |
+                    Q(entidade__cnpj__icontains=termo_pesquisado) |
+                    Q(donativo__unidade__icontains=termo_pesquisado) |
+                    Q(donativo__descricao__icontains=termo_pesquisado) 
+                )
+
+            return qs
+    
 #InstanciaDonativo DetailView
 class RegistroNecessidadeDetailView(generic.DetailView):
     model=InstanciaDonativo
 
 #InstanciaDonativo Create-Update-Delete
-class RegistroNecessidadeCreate(PermissionRequiredMixin,CreateView):
+class RegistroNecessidadeCreate(LoginRequiredMixin, PermissionRequiredMixin,CreateView):
     permission_required = 'appdoacoes.pode_criar_atualizar_necessidade'
     model = InstanciaDonativo
     fields = ('donativo','entidade','quantidade')
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.is_staff:
+            entidade_queryset = EmpresaEntidade.objects.filter(usuario_responsavel=self.request.user)
+        else:
+            entidade_queryset = EmpresaEntidade.objects.all()    
+        form.fields['entidade'].queryset = entidade_queryset
+        return form
+
     def test_func(self):
         instancia_donativo = self.get_object()
         return self.request.user == instancia_donativo.entidade.usuario_responsavel or self.request.user.is_staff
+    
+    def form_valid(self, form):    
+        donativo = form.cleaned_data['donativo']
+        entidade = form.cleaned_data['entidade']
+        quantidade = form.cleaned_data['quantidade']
+
+        try:
+            instancia_donativo = InstanciaDonativo.objects.get(donativo=donativo, entidade=entidade)
+        except InstanciaDonativo.DoesNotExist:            
+            return super().form_valid(form)
+
+        instancia_donativo.quantidade += quantidade
+        instancia_donativo.save()
+
+        return redirect(instancia_donativo)
 
 class RegistroNecessidadeUpdate(PermissionRequiredMixin,UpdateView):
     permission_required = 'appdoacoes.pode_criar_atualizar_necessidade'    
