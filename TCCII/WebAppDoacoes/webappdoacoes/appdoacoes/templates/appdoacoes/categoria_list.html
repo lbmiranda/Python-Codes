@@ -28,10 +28,10 @@
         </ul>
     </div>
 
-    {% if user.is_staff or perms.appdoacoes.pode_criar_atualizar_donativo %} 
+    {% if user.is_staff or perms.appdoacoes.pode_criar_atualizar_categoria %} 
         <div class='d-inline-flex flex-row justify-content-center p-2 m-4'>
-            <a href="{% url 'donativo-create' %}">
-                <button class="btn btn-primary">Cadastrar donativo</button>
+            <a href="{% url 'categoria-create' %}">
+                <button class="btn btn-primary">Cadastrar categoria</button>
             </a>            
         </div>
     {% endif %}

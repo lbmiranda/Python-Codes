@@ -2,19 +2,31 @@
 
 {% block content %}
 
-    <h1>Donativo: {{ donativo.pk }}</h1>
-
-    <p><strong>Descrição:</strong>{{ donativo.descricao }}</p>
-    <p><strong>Tipo:</strong> {{ donativo.categoria }}</p>
- 
-    <p>
-        {% if user.is_staff %}
-          <br>
-          <li><a href="{% url 'donativo-update' donativo.pk %}">Atualizar donativo</a></li>
-          <li><a href="{% url 'donativo-delete' donativo.pk %}">Deletar donativo</a></li>
-        {% endif %}
-    </p>
-  
+    <section class='d-flex flex-row justify-content-center p-2'>
+      <h1>Detalhes do donativo</h1>
+    </section>
+    
+    <section class="container-sm mx-auto">
+      <ul class='list-group'>
+        <li class="list-group-item list-group-item-secondary">Descrição: {{ donativo.descricao }} </li>
+        <li class="list-group-item list-group-item-secondary">Categoria: {{ donativo.categoria }} </li>
+      </ul>
+    </section>
+    
+    <section class="container-sm mx-auto"> 
+      {% if user.is_staff or perms.appdoacoes.pode_criar_atualizar_donativo %}    
+      <div class='d-inline-flex flex-row justify-content-center p-2 m-4'>
+        <ul class='list-group'>
+          <li class='list-group list-group-item'><a href="{% url 'donativo-update' donativo.id %}">
+            <button class="btn btn-primary">Atualizar donativo</button>
+          </a></li>     
+          <li class='list-group list-group-item'><a href="{% url 'donativo-delete' donativo.id %}">
+          <button class="btn btn-danger">Deletar donativo</button>
+          </a></li>
+        </ul>          
+    </div>
+      {% endif %}
+    </section>
  
 
 {% endblock %}

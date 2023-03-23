@@ -1,11 +1,16 @@
 {% extends 'base_generica.html' %}
 
 {% block content %}
-  <h2><strong>Cadastrar novo donativo</strong></h2>
-  <br>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Cadastrar</button>
-  </form>
+
+  <section class='container-sm mx-auto'>
+    <h2 class='mt-2 mb-5'>Criar ou Atualizar donativo</h2>
+    <form action="" method="post">
+        {% csrf_token %} 
+        <table class='table mb-1'>
+            {{ form.as_table }}
+        </table>
+        <input class="btn btn-primary" type="submit" value="Registrar">
+    </form>
+  </section>
+
 {% endblock %}

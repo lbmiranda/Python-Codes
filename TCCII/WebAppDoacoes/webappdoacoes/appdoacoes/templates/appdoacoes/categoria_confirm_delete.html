@@ -1,14 +1,15 @@
 {% extends "base_generica.html" %}
 
 {% block content %}
+<section class='container-sm mx-auto'>
+  <h2 class='mt-2 mb-5'>Deletar categoria</h2>
 
-<h1>Deletar categoria</h1>
+  <p>Você tem certeza que quer deletar este registro? <strong class='text-danger'> {{ categoria }} </strong></p>
 
-<p>Você tem certeza que quer deletar este registro? <strong> {{ categoria }} </strong></p>
-
-<form action="" method="POST">
-  {% csrf_token %}
-  <input type="submit" value="Sim, deletar." />
-</form>
+  <form action="" method="POST">
+    {% csrf_token %}
+    <input class='btn btn-danger' type="submit" value="Sim, deletar." />
+  </form>
+</section>
 
 {% endblock %}

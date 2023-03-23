@@ -1,146 +1,141 @@
 {% extends "base_generica.html" %}
 
 {% block content %}
-    <div>
-        <h1>Página de perfil para o usuário: {{ perfil_usuario }}</h1>
-                
-        {% if user.tipo_de_conta == 'comunidade-PF' %}
-            {% csrf_token %}
-            <br>
-            <p>Tipo de conta: Comunidade PF</p>
-            <br>
-            <p>Detalhes: {{ perfil_usuario.detalhes }}
-            <br>
+    <section class='d-flex flex-row justify-content-center p-2'>
+        <h1>Página do perfil</h1>
+    </section>
+
+    <section class='container-sm mx-auto'>
+        <div>
+            {% if user.tipo_de_conta == 'comunidade-PF' %}
+                {% csrf_token %}
+                <ul class='list-group'>
+                    <li class='list-group list-group-item'>Tipo de conta: Comunidade PF</li>            
+                    <li class='list-group list-group-item'>Detalhes: {{ perfil_usuario.detalhes }}</li>
+                </ul>            
+                <div>
+                    <button onclick="document.getElementById('edit-det-form').style.display='block'">Editar detalhes</button>
+
+                        <div id="edit-det-form" style="display:none">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form_atualizar_perfil.detalhes }}
+                                <br>
+                                <input class='btn btn-success'  type="submit" value="Salvar">
+                                <button class='btn btn-warning' type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
+                            </form>
+                        </div>            
+                </div>
+                <section class='container-sm mx-auto'>
+                    {% if pf_perfil == none %}
+                        <p>Sem dados cadastrados para o perfil</p>    
+                        <div>
+                            <button class='btn btn-primary' onclick="document.getElementById('cria-ent-form').style.display='block'">Cadastrar dados</button>
             
-            <div>
-                <button onclick="document.getElementById('edit-det-form').style.display='block'">Editar detalhes</button>
+                                <div id="cria-ent-form" style="display:none">
+                                    <form method="post">
+                                        {% csrf_token %}        
+                                        {{ form_criar_pf.as_p }}
+                                        <br>
+                                        <input class='btn btn-success' type="submit" value="Salvar">
+                                        <button class='btn btn-warning'type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
+                                    </form>
+                                </div>            
+                        </div>    
+                    {% else %}                
+                        <p>Nome e sobrenome: {{ pf_perfil }} </p>
+                    {% endif %}
+                </section>
+        </div>
+    </section>
 
-                    <div id="edit-det-form" style="display:none">
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form_atualizar_perfil.detalhes }}
-                            <br>
-                            <input type="submit" value="Salvar">
-                            <button type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
-                        </form>
-                    </div>            
-            </div>
-
-            <br>
-            <div>
-                {% if pf_perfil == none %}
-                    <p>Sem dados cadastrados para o perfil</p>
-
-                    <div>
-                        <button onclick="document.getElementById('cria-ent-form').style.display='block'">Cadastrar dados</button>
-        
-                            <div id="cria-ent-form" style="display:none">
-                                <form method="post">
-                                    {% csrf_token %}        
-                                    {{ form_criar_pf.as_p }}
-                                    <br>
-                                    <input type="submit" value="Salvar">
-                                    <button type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
-                                </form>
-                            </div>            
-                    </div>
-
-                {% else %}                
-                    <p>Nome e sobrenome: {{ pf_perfil }} </p>
-                {% endif %}
-            </div>
+               
+    <section class='container-sm mx-auto'>
         {% elif user.tipo_de_conta == 'comunidade-PJ' %}
             {% csrf_token %}
-            <br>
-            <p>Tipo de conta: Comunidade PJ </p>
-            <br>
-            <p>Detalhes: {{ perfil_usuario.detalhes }}
-            <br>
+            <ul class='list-group'>
+                <li class='list-group list-group-item'>Tipo de conta: Comunidade PJ</li>            
+                <li class='list-group list-group-item'>Detalhes: {{ perfil_usuario.detalhes }}</li>
+            </ul>  
             <div>
-                <button onclick="document.getElementById('edit-det-form').style.display='block'">Editar detalhes</button>
+                <button class='btn btn-primary' onclick="document.getElementById('edit-det-form').style.display='block'">Editar detalhes</button>
 
                     <div id="edit-det-form" style="display:none">
                         <form method="post">
                             {% csrf_token %}
                             {{ form_atualizar_perfil.detalhes }}
                             <br>
-                            <input type="submit" value="Salvar">
-                            <button type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
+                            <input class='btn btn-success' type="submit" value="Salvar">
+                            <button class='btn btn-warning'type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
                         </form>
                     </div>            
             </div>
-            <br>
             <div>
                 {% if pj_perfil == none %}
                     <p>Sem dados cadastrados para o perfil</p>
-
                     <div>
-                        <button onclick="document.getElementById('cria-ent-form').style.display='block'">Cadastrar dados</button>
+                        <button class='btn btn-primary' onclick="document.getElementById('cria-ent-form').style.display='block'">Cadastrar dados</button>
         
                             <div id="cria-ent-form" style="display:none">
                                 <form method="post">
                                     {% csrf_token %}        
                                     {{ form_criar_pj.as_p }}
                                     <br>
-                                    <input type="submit" value="Salvar">
-                                    <button type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
+                                    <input class='btn btn-success' type="submit" value="Salvar">
+                                    <button class='btn btn-warning' type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
                                 </form>
                             </div>            
                     </div>
-
                 {% else %}                
                     <p>Nome fantasia: {{ pj_perfil }} </p>
                 {% endif %}
             </div>
-        {% elif user.tipo_de_conta == 'entidade' %}
-            {% csrf_token %}
-            <p>Tipo de conta: Entidade</p>
+        </section>
+        <section>
+            {% elif user.tipo_de_conta == 'entidade' %}
+                {% csrf_token %}
+                <ul class='list-group'>
+                    <li class='list-group list-group-item'>Tipo de conta: Entidade</li>            
+                    <li class='list-group list-group-item'>Detalhes: {{ perfil_usuario.detalhes }}</li>
+                </ul>            
+                <div>
+                    <button class='btn btn-primary' onclick="document.getElementById('edit-det-form').style.display='block'">Editar detalhes</button>
 
-                        <br>
-            <p>Detalhes: {{ perfil_usuario.detalhes }}
-           
-            <div>
-                <button onclick="document.getElementById('edit-det-form').style.display='block'">Editar detalhes</button>
+                        <div id="edit-det-form" style="display:none">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form_atualizar_perfil.detalhes }}
 
-                    <div id="edit-det-form" style="display:none">
-                        <form method="post">
-                            {% csrf_token %}
-                            {{ form_atualizar_perfil.detalhes }}
-
-                            {{ form_criar_entidade.as_p }}
-                            <br>
-                            <input type="submit" value="Salvar">
-                            <button type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
-                        </form>
-                    </div>            
-            </div>
+                                {{ form_criar_entidade.as_p }}
+                                <br>
+                                <input class='btn btn-success' type="submit" value="Salvar">
+                                <button class='btn btn-warning' type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
+                            </form>
+                        </div>            
+                </div>             
+                <div>
+                    {% if entidade_perfil == none %}
+                        <p>Sem entidade cadastrada para o perfil</p>
+                        <div>
+                            <button class='btn btn-primary' onclick="document.getElementById('cria-ent-form').style.display='block'">Criar entidade</button>
             
-            <br>
-
-            <div>
-                {% if entidade_perfil == none %}
-                    <p>Sem entidade cadastrada para o perfil</p>
-
-                    <div>
-                        <button onclick="document.getElementById('cria-ent-form').style.display='block'">Criar entidade</button>
-        
-                            <div id="cria-ent-form" style="display:none">
-                                <form method="post">
-                                    {% csrf_token %}        
-                                    {{ form_criar_entidade.as_p }}
-                                    <br>
-                                    <input type="submit" value="Salvar">
-                                    <button type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
-                                </form>
-                            </div>            
-                    </div>
-
-                {% else %}                
-                    <p>Entidade associada ao perfil: {{ entidade_perfil }} </p>
-                {% endif %}
-            </div>
-
+                                <div id="cria-ent-form" style="display:none">
+                                    <form method="post">
+                                        {% csrf_token %}        
+                                        {{ form_criar_entidade.as_p }}
+                                        <br>
+                                        <input class='btn btn-success' type="submit" value="Salvar">
+                                        <button class='btn btn-warning' type="button" onclick="document.getElementById('edit-det-form').style.display='none'">Cancelar</button>
+                                    </form>
+                                </div>            
+                        </div>
+                    {% else %}                
+                        <p>Entidade associada ao perfil: {{ entidade_perfil }} </p>
+                    {% endif %}
+                </div>
+            </section>
         {% endif %}
     </div>
+</section>
 
 {% endblock content %}

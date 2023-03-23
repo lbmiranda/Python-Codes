@@ -2,28 +2,72 @@
 
 {% block content %}
 
-    <h1>Entidade: {{ empresaentidade.nome_fantasia }}</h1>
+  <section class='d-flex flex-row justify-content-center p-2'>
+    <h1>Detalhes da Entidade</h1>
+  </section>
 
-    <p><strong>CNPJ:</strong>{{ empresaentidade.cnpj }}</p>
-    <p><strong>Nome fantasia:</strong> {{ empresaentidade.nome_fantasia }}</p>
-    <p><strong>Endereço:</strong> {{ empresaentidade.get_endereco }}</p>
-    <p><strong>Contato:</strong> {{ empresaentidade.email }}</p>
+  <section class="container-sm mx-auto">
+    <ul class='list-group'>
+      <li class="list-group-item list-group-item-primary">Nome fantasia: {{ empresaentidade.nome_fantasia }} </li>
+      <li class="list-group-item list-group-item-secondary">CNPJ: {{ empresaentidade.cnpj }} </li>
+      <li class="list-group-item list-group-item-secondary">Endereço: {{ empresaentidade.get_endereco }} </li>
+      <li class="list-group-item list-group-item-secondary">Contato: {{ empresaentidade.email }} </li> 
+    </ul>
+  </section>
+
+  <section class='container-sm mx-auto mt-5'>
+    <h4>Donativos necessários</h4>
     
-  
-    <div style="margin-left:20px;margin-top:20px">
-      <h4>Donativos necessários</h4>
-      <br>
-        <ul>
-          {% for instancia in registronecessidade_list %}
-            <li>{{ instancia.donativo.descricao }} - {{ instancia.quantidade }} {{ instancia.donativo.unidade }}</li>
-          {% empty %}
-            <li>Nenhum material encontrado.</li>
-          {% endfor %}
-        </ul>
-    </div>
+      <table class='table table-striped table-hover'>
+        <thead>
+        <tr>            
+            <th>Descrição</th>
+            <th>Quantidade</th>
+            <th>Unidade</th>  
+            <th>Deletar</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for instancia in registronecessidade_list %}
+            <tr>
+                <td>{{ instancia.donativo.descricao }}</td>
+                <td>{{ instancia.quantidade }}</td>
+                <td>{{ instancia.donativo.unidade }}</td>
+                {% if user.is_staff or user == instancia.entidade.usuario_responsavel %}                
+                    <td> 
+                        <form method="post" action="{% url 'necessidade-delete' instancia.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i> Excluir
+                            </button>
+                        </form>
+                    </td>
+                {% else %}
+                <td>                   
+                    <button type="" class="btn btn-danger btn-sm">
+                        <i class="fa fa-trash"></i> Não autorizado
+                    </button>
+                </td>
 
+                {% endif %}                       
+            </tr>
+        {% empty %}
+            <tr>
+            <td colspan="3">Nenhum resultado encontrado.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>   
+  </section>
+  
+  <section class="container-sm mx-auto"> 
     {% if user.is_staff or user == instancia.entidade.usuario_responsavel %}    
-      <p><a href={% url 'necessidade-create' %}>Cadastrar necessidade</a></p>
+    <div class='d-inline-flex flex-row justify-content-center p-2 m-4'>
+      <a href="{% url 'necessidade-create' %}">
+          <button class="btn btn-primary">Cadastrar necessidade</button>
+      </a>            
+  </div>
     {% endif %}
+  </section>
 
 {% endblock %}

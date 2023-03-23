@@ -6,12 +6,6 @@ body {
   width: 400px;
 }
 
-.td-fit {
-  white-space: nowrap;
-  width: 1%;
-}
-
-.th-fit {
-    white-space: nowrap;
-    width: 1%;
+.lista-width {
+  width: 300px;
 }

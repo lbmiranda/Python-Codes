@@ -2,22 +2,36 @@
 
 {% block content %}
 
-    <h1>Necessidade: {{ instanciadonativo.pk }}</h1>
+  <section class='d-flex flex-row justify-content-center p-2'>
+    <h1>Detalhes do donativo</h1>
+  </section>
 
-    <p><strong>Donativo:</strong>{{ instanciadonativo.donativo }}</p>
-    <p><strong>Entidade:</strong> {{ instanciadonativo.entidade }}</p>
-    <p><strong>Quantidade:</strong> {{ instanciadonativo.quantidade }}</p>
+  <section class="container-sm mx-auto">
+    <ul class='list-group'>
+      <li class="list-group-item list-group-item-primary">Chave donativo: {{ instanciadonativo.pk }} </li>
+      <li class="list-group-item list-group-item-primary">Donativo: {{ instanciadonativo.donativo }} </li>
+      <li class="list-group-item list-group-item-secondary">Entidade: {{ instanciadonativo.entidade }} </li>
+      <li class="list-group-item list-group-item-secondary">Quantidade: {{ instanciadonativo.quantidade }} </li>
+    </ul>
+  </section>
 
+  <section class="container-sm mx-auto"> 
+    {% if user.is_staff or user == instancia.entidade.usuario_responsavel %}    
+    <div class='d-inline-flex flex-row justify-content-center p-2 m-4'>
+      <ul class='list-group'>
+        <li class='list-group list-group-item'><a href="{% url 'necessidade-update' instanciadonativo.pk %}">
+          <button class="btn btn-primary">Atualizar categoria</button>
+        </a></li>     
+        <li class='list-group list-group-item'><a href="{% url 'necessidade-delete' instanciadonativo.pk %}">
+        <button class="btn btn-primary">Deletar categoria</button>
+        </a></li>
+      </ul>          
+  </div>
+    {% endif %}
+  </section>
+
+  <div>
     <p><a href="{% url 'necessidades-list' %}">Voltar para lista de necessidades cadastradas</a></p>
- 
-    <p>
-        {% if user.is_staff %}
-          <br>
-          <li><a href="{% url 'necessidade-update' instanciadonativo.pk %}">Atualizar necessidade</a></li>
-          <li><a href="{% url 'necessidade-delete' instanciadonativo.pk %}">Deletar necessidade</a></li>
-        {% endif %}
-    </p>
-  
- 
+  </div> 
 
 {% endblock %}
