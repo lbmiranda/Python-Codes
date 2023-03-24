@@ -18,9 +18,9 @@ class User(AbstractUser):
     tipo_de_conta = models.CharField(max_length=20, choices=TIPO_CONTA_CHOICES)
     email = models.EmailField(unique=True)
 
-    entidade = models.ForeignKey("EmpresaEntidade", verbose_name=("Entidade"), on_delete=models.RESTRICT, null=True,blank=True)
-    comunidade_pf = models.ForeignKey("PessoaComunidade",verbose_name=('Comunidade PF'),on_delete=models.RESTRICT, null=True,blank=True)
-    comunidade_pj = models.ForeignKey("EmpresaComunidade",verbose_name=('Comunidade PJ'),on_delete=models.RESTRICT, null=True,blank=True)
+    entidade = models.ForeignKey("EmpresaEntidade", verbose_name=("Entidade"), on_delete=models.CASCADE, null=True,blank=True)
+    comunidade_pf = models.ForeignKey("PessoaComunidade",verbose_name=('Comunidade PF'),on_delete=models.CASCADE, null=True,blank=True)
+    comunidade_pj = models.ForeignKey("EmpresaComunidade",verbose_name=('Comunidade PJ'),on_delete=models.CASCADE, null=True,blank=True)
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -103,7 +103,7 @@ class PessoaComunidade(Comunidade):
     )
 
     def __str__(self):
-        return f'{self.nome}, {self.sobrenome}'
+        return f'{self.nome} {self.sobrenome}'
     
 class EmpresaComunidade(Comunidade):
     cnpj = models.CharField(primary_key=True, max_length=14,validators=[RegexValidator(r'^\d{14}$', 'CNPJ deve conter 14 digitos')])

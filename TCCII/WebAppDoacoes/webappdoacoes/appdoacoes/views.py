@@ -58,19 +58,22 @@ def perfil_usuario(request):
         empresa_entidade.save()
         perfil_usuario.usuario.entidade = empresa_entidade
         perfil_usuario.usuario.save()
+        return redirect('perfil-usuario')
     
     if form_criar_pf.is_valid():
         comunidade_pf = form_criar_pf.save(commit=False)
         perfil_usuario.usuario.comunidade_pf = comunidade_pf
         form_criar_pf.save()
         perfil_usuario.usuario.save()
+        return redirect('perfil-usuario')
 
     if form_criar_pj.is_valid():
         comunidade_pj = form_criar_pj.save(commit=False)
         perfil_usuario.usuario.comunidade_pj = comunidade_pj
         form_criar_pj.save()
         perfil_usuario.usuario.save()
-
+        return redirect('perfil-usuario')
+    
     context = {
         'perfil_usuario': perfil_usuario,
         'form_atualizar_perfil': form_atualizar_perfil,

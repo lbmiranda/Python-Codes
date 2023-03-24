@@ -46,4 +46,10 @@ class DonativoAdmin(admin.ModelAdmin):
     list_display = ('id','descricao','categoria','unidade')
 
 admin.site.register(PessoaComunidade)
-admin.site.register(InstanciaDonativo)
+
+@admin.register(InstanciaDonativo)
+class InstanciaDonativoAdmin(admin.ModelAdmin):
+    list_display = ('donativo','entidade','quantidade')
+
+
+
